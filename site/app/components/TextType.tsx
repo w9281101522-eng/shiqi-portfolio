@@ -64,7 +64,9 @@ export default function TextType({
       yoyo: true,
       ease: "power2.inOut",
     });
-    return () => tween.kill();
+    return () => {
+      tween.kill();
+    };
   }, [cursorBlinkDuration, showCursor]);
 
   useEffect(() => {

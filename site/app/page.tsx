@@ -10,6 +10,7 @@ import Folder from "./components/Folder";
 import FuzzyText from "./components/FuzzyText";
 import ScrollStack, { ScrollStackItem } from "./components/ScrollStack";
 import TextType from "./components/TextType";
+import { withBasePath } from "./basePath";
 
 type Project = {
   index: string;
@@ -155,13 +156,135 @@ export default function Home() {
   const heroRef = useRef<HTMLElement>(null);
   const workListRef = useRef<HTMLDivElement>(null);
   const aboutShowcaseRef = useRef<HTMLDivElement>(null);
+  const recordAudioRef = useRef<HTMLAudioElement>(null);
+  const recordLineRef = useRef<HTMLSpanElement>(null);
+  const recordHoverTimerRef = useRef<number | null>(null);
+  const recordFadeFrameRef = useRef<number | null>(null);
+  const recordPlayingRef = useRef(false);
+  const contactAudioRef = useRef<HTMLAudioElement>(null);
+  const contactSoundFrameRef = useRef<number | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const [activeProject, setActiveProject] = useState<number | null>(0);
   const [notice, setNotice] = useState("");
+  const [recordPlaying, setRecordPlaying] = useState(false);
+  const [recordTime, setRecordTime] = useState("0:00 / 0:10");
 
   const showNotice = (message: string) => {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2200);
+  };
+
+  const formatRecordTime = (value: number) => {
+    const seconds = Math.max(0, Math.floor(Number.isFinite(value) ? value : 0));
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  };
+
+  const updateRecordProgress = () => {
+    const audio = recordAudioRef.current;
+    if (!audio) return;
+    const duration = Number.isFinite(audio.duration) ? audio.duration : 10;
+    const progress = duration ? Math.min(1, audio.currentTime / duration) : 0;
+    recordLineRef.current?.style.setProperty("--audio-progress", `${(progress * 100).toFixed(2)}%`);
+    setRecordTime(`${formatRecordTime(audio.currentTime)} / ${formatRecordTime(duration)}`);
+  };
+
+  const setRecordPlaybackState = (value: boolean) => {
+    recordPlayingRef.current = value;
+    setRecordPlaying(value);
+  };
+
+  const fadeRecordTo = (target: number, duration: number) => {
+    const audio = recordAudioRef.current;
+    if (!audio) return;
+    if (recordFadeFrameRef.current) window.cancelAnimationFrame(recordFadeFrameRef.current);
+    const start = audio.volume;
+    const started = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min(1, (now - started) / duration);
+      const eased = progress < .5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      audio.volume = Math.max(0, Math.min(1, start + (target - start) * eased));
+      if (progress < 1) recordFadeFrameRef.current = window.requestAnimationFrame(step);
+      else recordFadeFrameRef.current = null;
+    };
+    recordFadeFrameRef.current = window.requestAnimationFrame(step);
+  };
+
+  const stopRecord = () => {
+    const audio = recordAudioRef.current;
+    if (!audio) return;
+    if (recordFadeFrameRef.current) window.cancelAnimationFrame(recordFadeFrameRef.current);
+    recordFadeFrameRef.current = null;
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = 0;
+    updateRecordProgress();
+    setRecordPlaybackState(false);
+  };
+
+  const playRecord = async () => {
+    const audio = recordAudioRef.current;
+    if (!audio || recordPlayingRef.current) return;
+    if (recordHoverTimerRef.current) window.clearTimeout(recordHoverTimerRef.current);
+    audio.currentTime = 0;
+    audio.volume = 0;
+    try {
+      await audio.play();
+      setRecordPlaybackState(true);
+      showNotice("当前播放：灵感与专注 ♫");
+      fadeRecordTo(.24, 420);
+    } catch {
+      stopRecord();
+    }
+  };
+
+  const toggleRecord = () => {
+    if (recordHoverTimerRef.current) window.clearTimeout(recordHoverTimerRef.current);
+    if (recordPlayingRef.current) stopRecord();
+    else void playRecord();
+  };
+
+  const queueRecordOnHover = () => {
+    if (!window.matchMedia("(hover:hover) and (pointer:fine)").matches || recordPlayingRef.current) return;
+    if (recordHoverTimerRef.current) window.clearTimeout(recordHoverTimerRef.current);
+    recordHoverTimerRef.current = window.setTimeout(() => void playRecord(), 300);
+  };
+
+  const stopContactSound = () => {
+    const audio = contactAudioRef.current;
+    if (contactSoundFrameRef.current) window.cancelAnimationFrame(contactSoundFrameRef.current);
+    contactSoundFrameRef.current = null;
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = 0;
+  };
+
+  const playContactSound = async () => {
+    const audio = contactAudioRef.current;
+    if (!audio) return;
+    stopContactSound();
+    try {
+      await audio.play();
+    } catch {
+      return;
+    }
+    const startedAt = performance.now();
+    const targetVolume = .24;
+    const fadeInDuration = 850;
+    const fadeOutStart = 8.55;
+    const stopAt = 10;
+    const updateSound = (now: number) => {
+      const elapsed = audio.currentTime;
+      const fadeIn = Math.min(1, (now - startedAt) / fadeInDuration);
+      const fadeOut = elapsed < fadeOutStart ? 1 : Math.max(0, (stopAt - elapsed) / (stopAt - fadeOutStart));
+      audio.volume = Math.max(0, Math.min(1, targetVolume * Math.min(fadeIn, fadeOut)));
+      if (elapsed >= stopAt || audio.ended) {
+        stopContactSound();
+        return;
+      }
+      contactSoundFrameRef.current = window.requestAnimationFrame(updateSound);
+    };
+    contactSoundFrameRef.current = window.requestAnimationFrame(updateSound);
   };
 
   function moveHero(event: ReactPointerEvent<HTMLElement>) {
@@ -178,6 +301,52 @@ export default function Home() {
     workListRef.current?.style.setProperty("--preview-x", `${event.clientX - rect.left}px`);
     workListRef.current?.style.setProperty("--preview-y", `${event.clientY - rect.top}px`);
   }
+
+  useEffect(() => {
+    const audio = recordAudioRef.current;
+    if (!audio) return;
+    audio.loop = false;
+    audio.volume = 0;
+    const update = () => updateRecordProgress();
+    const finish = () => stopRecord();
+    audio.addEventListener("loadedmetadata", update);
+    audio.addEventListener("timeupdate", update);
+    audio.addEventListener("ended", finish);
+    update();
+    return () => {
+      if (recordHoverTimerRef.current) window.clearTimeout(recordHoverTimerRef.current);
+      if (recordFadeFrameRef.current) window.cancelAnimationFrame(recordFadeFrameRef.current);
+      audio.removeEventListener("loadedmetadata", update);
+      audio.removeEventListener("timeupdate", update);
+      audio.removeEventListener("ended", finish);
+      audio.pause();
+    };
+  }, []);
+
+  useEffect(() => {
+    const audio = contactAudioRef.current;
+    if (!audio) return;
+    audio.volume = 0;
+    const finish = () => stopContactSound();
+    audio.addEventListener("ended", finish);
+    return () => {
+      audio.removeEventListener("ended", finish);
+      stopContactSound();
+    };
+  }, []);
+
+  useEffect(() => {
+    const resetPrimaryPageMedia = () => {
+      stopRecord();
+      stopContactSound();
+    };
+    window.addEventListener("pagehide", resetPrimaryPageMedia);
+    window.addEventListener("pageshow", resetPrimaryPageMedia);
+    return () => {
+      window.removeEventListener("pagehide", resetPrimaryPageMedia);
+      window.removeEventListener("pageshow", resetPrimaryPageMedia);
+    };
+  }, []);
 
   useEffect(() => {
     const root = aboutShowcaseRef.current;
@@ -297,34 +466,41 @@ export default function Home() {
         id="top"
       >
         <div className="desk-collage desk-collage-left" aria-hidden="true">
-          <img className="desk-object desk-paper desk-static" src="/desk-paper.png" alt="" />
-          <img className="desk-object desk-lamp" src="/desk-lamp.png" alt="" />
-          <img className="desk-object desk-note" src="/desk-note.png" alt="" />
-          <img className="desk-object desk-notebook desk-static" src="/desk-notebook.png" alt="" />
-          <img className="desk-object desk-pen" src="/desk-pen.png" alt="" />
-          <img className="desk-object desk-coffee" src="/desk-coffee.png" alt="" />
-          <img className="desk-object desk-film" src="/desk-film.png" alt="" />
-          <img className="desk-object desk-lighter" src="/desk-lighter.png" alt="" />
-          <img className="desk-object desk-cream" src="/desk-cream.png" alt="" />
+            <img className="desk-object desk-paper desk-static" src={withBasePath("/desk-paper.png")} alt="" />
+            <img className="desk-object desk-lamp" src={withBasePath("/desk-lamp.png")} alt="" />
+            <img className="desk-object desk-note" src={withBasePath("/desk-note.png")} alt="" />
+            <img className="desk-object desk-notebook desk-static" src={withBasePath("/desk-notebook.png")} alt="" />
+            <img className="desk-object desk-pen" src={withBasePath("/desk-pen.png")} alt="" />
+            <img className="desk-object desk-coffee" src={withBasePath("/desk-coffee.png")} alt="" />
+            <img className="desk-object desk-film" src={withBasePath("/desk-film.png")} alt="" />
+            <img className="desk-object desk-lighter" src={withBasePath("/desk-lighter.png")} alt="" />
+            <img className="desk-object desk-cream" src={withBasePath("/desk-cream.png")} alt="" />
         </div>
         <div className="desk-collage desk-collage-right">
-          <img className="desk-object desk-cursor" src="/desk-cursor.png" alt="" aria-hidden="true" />
+              <img className="desk-object desk-cursor" src={withBasePath("/desk-cursor.png")} alt="" aria-hidden="true" />
           <Folder
             className="desk-folder"
             color="#25A7F0"
             size={2}
             items={[
-              <img key="after-effects" className="folder-app-icon" src="/folder-after-effects.png" alt="After Effects" />,
-              <img key="codex" className="folder-app-icon" src="/folder-codex-clean.png" alt="Codex" />,
-              <img key="figma" className="folder-app-icon" src="/folder-figma.png" alt="Figma" />,
+                <img key="after-effects" className="folder-app-icon" src={withBasePath("/folder-after-effects.png")} alt="After Effects" />,
+                <img key="codex" className="folder-app-icon" src={withBasePath("/folder-codex-clean.png")} alt="Codex" />,
+                <img key="figma" className="folder-app-icon" src={withBasePath("/folder-figma.png")} alt="Figma" />,
             ]}
           />
-          <img className="desk-object desk-toolbar" src="/desk-toolbar.png" alt="" aria-hidden="true" />
+            <img className="desk-object desk-toolbar" src={withBasePath("/desk-toolbar.png")} alt="" aria-hidden="true" />
         </div>
-        <button className="desk-object desk-record" onClick={() => showNotice("当前播放：专注与好奇心 ♫")} aria-label="播放案头唱片">
-          <span className="desk-record-vinyl"><img src="/desk-record-card.png" alt="" /><img src="/desk-record-disc.png" alt="" /></span>
-          <span className="desk-record-copy"><small>Souleance</small><strong>Jazz et thé vert</strong><span className="desk-record-line" /><small>1:30 / 3:32</small></span>
+        <button
+          className={`desk-object desk-record${recordPlaying ? " is-playing" : ""}`}
+          onPointerEnter={queueRecordOnHover}
+          onClick={toggleRecord}
+          aria-label={recordPlaying ? "停止播放《灵感与专注》" : "播放音乐《灵感与专注》"}
+          aria-pressed={recordPlaying}
+        >
+                <span className="desk-record-vinyl"><img src={withBasePath("/desk-record-card.png")} alt="" /><img src={withBasePath("/desk-record-disc.png")} alt="" /></span>
+          <span className="desk-record-copy"><small>Shiqi&apos;s desk</small><strong>灵感与专注</strong><span ref={recordLineRef} className="desk-record-line" /><small>{recordTime}</small></span>
         </button>
+              <audio ref={recordAudioRef} id="deskRecordAudio" src={withBasePath("/audio/desk-lofi-jazz-10s.mp3")} preload="metadata" />
         <div className="airdrop-card-live" aria-label="灵感投送卡片">
           <div className="airdrop-heading"><strong>灵感投送</strong><small>我想和你分享一张设计便签</small></div>
           <div className="airdrop-content">清晰 · 好用 · 有趣</div>
@@ -337,8 +513,8 @@ export default function Home() {
           <p className="hero-statement">Product Design <i>Verb &amp; Noun</i></p>
           <p className="hero-intro">I care about how people use products,<br />and whether every detail can naturally spark delight.</p>
           <div className="hero-actions">
-            <a href="#experience">查看实习经历 <span>↓</span></a>
-            <a href="/resume.pdf?v=20260718" target="_blank" rel="noreferrer">查看简历 ↗</a>
+            <a href="#projects">查看精选项目 <span>↓</span></a>
+            <a href={withBasePath("/resume.pdf?v=20260718")} target="_blank" rel="noreferrer">查看简历 ↗</a>
           </div>
         </div>
 
@@ -377,26 +553,26 @@ export default function Home() {
           <h2><TextType text="Recently Made ▶" className="section-type section-type-recent" /><small>最近做过的事</small></h2>
           <div className="about-showcase" ref={aboutShowcaseRef}>
             <div className="about-list">
-              <article className="about-entry" tabIndex={0} style={{ "--row-accent": "#25a7f0" } as CSSProperties}>
-                <img className="about-entry-icon" src="/work-color-call.png" alt="炫彩通话项目缩略图" />
+          <a className="about-entry about-entry-project-link" href={withBasePath("/projects/color-call")} style={{ "--row-accent": "#25a7f0" } as CSSProperties} aria-label="查看炫彩通话小程序搭建项目">
+            <img className="about-entry-icon" src={withBasePath("/work-color-call.png")} alt="炫彩通话项目缩略图" />
                 <div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.01—2026.04</span></div>
-                <figure className="about-entry-preview"><img src="/project-color-call.png" alt="炫彩通话小程序项目预览" /><figcaption>从需求理解到高保真交付，持续校准产品体验。</figcaption></figure>
-              </article>
-              <article className="about-entry" tabIndex={0} style={{ "--row-accent": "#ff7a1a" } as CSSProperties}>
-                <img className="about-entry-icon" src="/work-moguding.png" alt="蘑菇丁项目缩略图" />
+            <figure className="about-entry-preview"><img src={withBasePath("/project-color-call.png")} alt="炫彩通话小程序项目预览" /><figcaption>从需求理解到高保真交付，持续校准产品体验。</figcaption></figure>
+              </a>
+          <a className="about-entry about-entry-project-link" href={withBasePath("/projects/moguding")} style={{ "--row-accent": "#ff7a1a" } as CSSProperties} aria-label="查看蘑菇丁 APP 改版升级项目">
+            <img className="about-entry-icon" src={withBasePath("/work-moguding.png")} alt="蘑菇丁项目缩略图" />
                 <div><strong>蘑菇丁 APP 改版升级</strong><span>UI 设计实习 · 2025.04—2025.09</span></div>
-                <figure className="about-entry-preview"><img src="/project-moguding.png" alt="蘑菇丁 APP 改版项目预览" /><figcaption>把复杂信息整理成更清晰、更容易行动的界面。</figcaption></figure>
-              </article>
-              <article className="about-entry" tabIndex={0} style={{ "--row-accent": "#65d6f5" } as CSSProperties}>
-                <img className="about-entry-icon" src="/project-kugou-season.png" alt="酷狗寻音季项目缩略图" />
+            <figure className="about-entry-preview"><img src={withBasePath("/project-moguding.png")} alt="蘑菇丁 APP 改版项目预览" /><figcaption>把复杂信息整理成更清晰、更容易行动的界面。</figcaption></figure>
+              </a>
+          <a className="about-entry about-entry-project-link" href={withBasePath("/projects/kugou")} style={{ "--row-accent": "#65d6f5" } as CSSProperties} aria-label="查看酷狗寻音季视觉设计项目">
+            <img className="about-entry-icon" src={withBasePath("/project-kugou-season.png")} alt="酷狗寻音季项目缩略图" />
                 <div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2024.10—2025.02</span></div>
-                <figure className="about-entry-preview"><img src="/project-kugou-season.png" alt="酷狗寻音季活动视觉项目预览" /><figcaption>以清透天空色、音乐道具与品牌 IP，构建轻快的狂欢季活动视觉。</figcaption></figure>
-              </article>
-              <article className="about-entry" tabIndex={0} style={{ "--row-accent": "#b7d95a" } as CSSProperties}>
-                <img className="about-entry-icon" src="/work-ip.png" alt="喵小甜 IP 项目缩略图" />
+            <figure className="about-entry-preview"><img src={withBasePath("/project-kugou-season.png")} alt="酷狗寻音季活动视觉项目预览" /><figcaption>以清透天空色、音乐道具与品牌 IP，构建轻快的狂欢季活动视觉。</figcaption></figure>
+              </a>
+          <a className="about-entry about-entry-project-link" href={withBasePath("/projects/miaoxiaotian")} style={{ "--row-accent": "#b7d95a" } as CSSProperties} aria-label="查看喵小甜 IP 全链路设计项目">
+            <img className="about-entry-icon" src={withBasePath("/work-ip.png")} alt="喵小甜 IP 项目缩略图" />
                 <div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.06—2024.08</span></div>
-                <figure className="about-entry-preview"><img src="/project-ip-scenes.png" alt="喵小甜 IP 全链路设计预览" /><figcaption>持续尝试让新技术拥有更亲和、更有温度的表达。</figcaption></figure>
-              </article>
+            <figure className="about-entry-preview"><img src={withBasePath("/project-ip-scenes.png")} alt="喵小甜 IP 全链路设计预览" /><figcaption>持续尝试让新技术拥有更亲和、更有温度的表达。</figcaption></figure>
+              </a>
             </div>
             <div className="about-cursors" aria-hidden="true">
               <span className="cursor-you"><i />You</span>
@@ -415,9 +591,28 @@ export default function Home() {
 
         <ScrollStack className="experience-list" itemDistance={140} itemScale={0.018} itemStackDistance={18} stackPosition="17%" scaleEndPosition="8%" baseScale={0.955} rotationAmount={0}>
           <ScrollStackItem>
+          <article className="experience-card experience-card-kugou" style={{ "--experience-accent": "#84ddf7" } as CSSProperties}>
+            <header>
+              <div><small>01 / 音乐 · 活动视觉</small><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div>
+              <div className="experience-meta"><span>2024.10—2025.02</span><span>广州</span></div>
+            </header>
+            <div className="experience-body">
+              <p className="experience-summary">完成“寻音季”主视觉与运营物料延展，建立年轻、轻盈的活动视觉语言。</p>
+              <aside className="experience-results">
+                <p>WORK RESULTS / 工作成果</p>
+                <div className="metric-grid metric-grid-two">
+                  <div className="metric"><strong aria-label="提升 20%"><CountUp to={20} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>活动参与人数</span></div>
+                  <div className="metric"><strong aria-label="提升 35%"><CountUp to={35} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>用户 7 日留存率</span></div>
+                </div>
+              </aside>
+            </div>
+          </article>
+          </ScrollStackItem>
+
+          <ScrollStackItem>
           <article className="experience-card" style={{ "--experience-accent": "#21ffc0" } as CSSProperties}>
             <header>
-              <div><small>01 / 互联网 · 电子商务</small><h3>上海掌淘网络科技有限公司</h3><p>UI 设计实习生 · 设计部</p></div>
+              <div><small>02 / 互联网 · 电子商务</small><h3>上海掌淘网络科技有限公司</h3><p>UI 设计实习生 · 设计部</p></div>
               <div className="experience-meta"><span>2025.04—2025.09</span><span>上海</span></div>
             </header>
             <div className="experience-body">
@@ -437,7 +632,7 @@ export default function Home() {
           <ScrollStackItem>
           <article className="experience-card experience-card-alt" style={{ "--experience-accent": "#b9d8ff" } as CSSProperties}>
             <header>
-              <div><small>02 / 通信 · 数字体验</small><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div>
+              <div><small>03 / 通信 · 数字体验</small><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div>
               <div className="experience-meta"><span>2026.01—2026.04</span><span>浙江</span></div>
             </header>
             <div className="experience-body">
@@ -447,25 +642,6 @@ export default function Home() {
                 <div className="metric-grid metric-grid-two">
                   <div className="metric"><strong aria-label="提升 35%"><CountUp to={35} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>用户七日留存率</span></div>
                   <div className="metric"><strong aria-label="完成率 76%"><CountUp to={76} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>创作完成率 · 高于预期 16%</span></div>
-                </div>
-              </aside>
-            </div>
-          </article>
-          </ScrollStackItem>
-
-          <ScrollStackItem>
-          <article className="experience-card experience-card-kugou" style={{ "--experience-accent": "#84ddf7" } as CSSProperties}>
-            <header>
-              <div><small>03 / 音乐 · 活动视觉</small><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div>
-              <div className="experience-meta"><span>2024.10—2025.02</span><span>广州</span></div>
-            </header>
-            <div className="experience-body">
-              <p className="experience-summary">完成“寻音季”主视觉与运营物料延展，建立年轻、轻盈的活动视觉语言。</p>
-              <aside className="experience-results">
-                <p>WORK RESULTS / 工作成果</p>
-                <div className="metric-grid metric-grid-two">
-                  <div className="metric"><strong aria-label="提升 20%"><CountUp to={20} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>活动参与人数</span></div>
-                  <div className="metric"><strong aria-label="提升 35%"><CountUp to={35} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>用户 7 日留存率</span></div>
                 </div>
               </aside>
             </div>
@@ -484,7 +660,7 @@ export default function Home() {
           {capabilities.map((item) => (
             <article className={`capability-card capability-card-${item.kind}`} key={item.number}>
               <header><small>{item.number}</small><em>{item.label}</em></header>
-              {item.image && <img className="capability-visual" src={item.image} alt={item.imageAlt} />}
+              {item.image && <img className="capability-visual" src={withBasePath(item.image)} alt={item.imageAlt} />}
               {item.kind === "system" && (
                 <div className="capability-system-board" aria-hidden="true">
                   <div className="system-sample system-sample-type">
@@ -498,7 +674,7 @@ export default function Home() {
                   </div>
                   <div className="system-sample system-sample-component">
                     <span>COMPONENT</span>
-                    <img src="/system-component-card.png" alt="" />
+                    <img src={withBasePath("/system-component-card.png")} alt="" />
                   </div>
                 </div>
               )}
@@ -520,6 +696,7 @@ export default function Home() {
             className="contact-falling"
             gravity={0.32}
             mouseConstraintStiffness={0.76}
+            onStart={() => void playContactSound()}
             lines={[
               { text: "Curious, observant, always designing.", className: "contact-falling-kicker" },
               { text: "Thanks for reading.", className: "contact-falling-headline" },
@@ -527,8 +704,9 @@ export default function Home() {
             ]}
           />
           <span className="contact-click-doodle" aria-hidden="true">
-            <img src="/click-hand-v2.png" alt="" />
+            <img src={withBasePath("/click-hand-v2.png")} alt="" />
           </span>
+          <audio ref={contactAudioRef} id="contactClickAudio" src={withBasePath("/audio/contact-click-sound.mp3")} preload="metadata" />
         </div>
         <a className="email" href="mailto:3619554001@qq.com" aria-label="发送邮件到 3619554001@qq.com">
           <span className="email-sticker" aria-hidden="true"><i></i><b>mail</b></span>
@@ -537,7 +715,7 @@ export default function Home() {
         </a>
         <div className="contact-meta">
           <div><small>PHONE / WECHAT</small><a href="tel:19956642163">199 5664 2163</a></div>
-          <div><small>LOCATION</small><p>吉林省长春市</p></div>
+          <div><small>LOCATION</small><p>安徽省池州市</p></div>
           <div><small>STATUS</small><p>寻找 UX / UI 设计机会</p></div>
           <a href="#top">回到顶部 ↑</a>
         </div>

@@ -8,6 +8,7 @@ type FallingTextProps = {
   className?: string;
   gravity?: number;
   mouseConstraintStiffness?: number;
+  onStart?: () => void;
 };
 
 export default function FallingText({
@@ -15,13 +16,22 @@ export default function FallingText({
   className = "",
   gravity = 0.32,
   mouseConstraintStiffness = 0.72,
+  onStart,
 }: FallingTextProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [started, setStarted] = useState(false);
 
+  useEffect(() => {
+    const resetAfterReturn = () => setStarted(false);
+    window.addEventListener("pageshow", resetAfterReturn);
+    return () => window.removeEventListener("pageshow", resetAfterReturn);
+  }, []);
+
   const start = () => {
+    if (started) return;
+    onStart?.();
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) setStarted(true);
   };
 
@@ -94,6 +104,12 @@ export default function FallingText({
       render.canvas.remove();
       Composite.clear(engine.world, false, true);
       Engine.clear(engine);
+      words.forEach((element) => {
+        element.style.removeProperty("position");
+        element.style.removeProperty("left");
+        element.style.removeProperty("top");
+        element.style.removeProperty("transform");
+      });
     };
   }, [gravity, mouseConstraintStiffness, started]);
 
@@ -103,7 +119,7 @@ export default function FallingText({
       className={`falling-text-container ${started ? "is-falling" : ""} ${className}`.trim()}
       role="button"
       tabIndex={0}
-      aria-label="点击让结尾文字落下"
+      aria-label="点击让结尾文字落下并播放音效"
       onClick={start}
       onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); start(); } }}
     >

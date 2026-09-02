@@ -62,8 +62,8 @@ export default function MiaoXiaotianProject() {
       <ProjectTopNav
         current="miaoxiaotian"
         links={[
-          { href: "#background", label: "背景" },
-          { href: "#profile", label: "角色" },
+          { href: "#top", label: "背景" },
+          { href: "#background", label: "角色" },
           { href: "#outfits", label: "换装" },
           { href: "#world", label: "场景" },
         ]}

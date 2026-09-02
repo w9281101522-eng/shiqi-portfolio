@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { withBasePath } from "../basePath";
 
 type ProjectSlug = "color-call" | "kugou" | "moguding" | "miaoxiaotian";
+type NavigationSlug = ProjectSlug | "beyond-design";
 
 type SectionLink = {
   href: string;
@@ -17,6 +18,11 @@ const projects = [
   { slug: "moguding", index: "02", name: "蘑菇丁", href: "/projects/moguding" },
   { slug: "kugou", index: "03", name: "酷狗音乐季", href: "/projects/kugou" },
   { slug: "miaoxiaotian", index: "04", name: "喵小甜 IP", href: "/projects/miaoxiaotian" },
+] as const;
+
+const navigationItems = [
+  ...projects,
+  { slug: "beyond-design", index: "05", name: "设计之外", href: "/beyond-design" },
 ] as const;
 
 const dockSpring = { mass: 0.12, stiffness: 170, damping: 15 };
@@ -109,18 +115,20 @@ function ProjectSectionDock({ links, label }: { links: SectionLink[]; label: str
   );
 }
 
-function getProject(slug: ProjectSlug) {
-  return projects.find((project) => project.slug === slug)!;
+function getNavigationItem(slug: NavigationSlug) {
+  return navigationItems.find((item) => item.slug === slug)!;
 }
 
 export function ProjectTopNav({
   current,
   links,
+  eyebrow = "PROJECT",
 }: {
-  current: ProjectSlug;
+  current: NavigationSlug;
   links: SectionLink[];
+  eyebrow?: string;
 }) {
-  const project = getProject(current);
+  const project = getNavigationItem(current);
 
   return (
     <header className="project-top-nav" data-project={current}>
@@ -131,7 +139,7 @@ export function ProjectTopNav({
 
       <ProjectSectionDock links={links} label={`${project.name}项目导航`} />
 
-      <span className="project-top-nav__index">PROJECT {project.index}</span>
+      <span className="project-top-nav__index">{eyebrow} {project.index}</span>
     </header>
   );
 }

@@ -7,6 +7,7 @@ import BubbleMenu from "./components/BubbleMenu";
 import CountUp from "./components/CountUp";
 import FallingText from "./components/FallingText";
 import Folder from "./components/Folder";
+import NotebookTrail from "./components/NotebookTrail";
 import FuzzyText from "./components/FuzzyText";
 import ScrollStack, { ScrollStackItem } from "./components/ScrollStack";
 import TextType from "./components/TextType";
@@ -33,7 +34,7 @@ const projects: Project[] = [
     english: "COLORFUL CALL",
     tagline: "让 AI 创作进入每一次通话",
     meta: "小程序搭建 · AIGC · 全链路体验",
-    period: "2026.01—2026.04",
+    period: "2026.02—2026.05",
     image: "/project-color-call.png",
     accent: "#25a7f0",
     overview:
@@ -50,7 +51,7 @@ const projects: Project[] = [
     english: "MOGUDING",
     tagline: "让实习求职更清晰、更高效",
     meta: "产品改版 · 求职体验 · 视觉系统",
-    period: "2025.04—2025.09",
+    period: "2025.07—2025.11",
     image: "/project-moguding.png",
     accent: "#ff6a00",
     overview:
@@ -67,7 +68,7 @@ const projects: Project[] = [
     english: "MIAO XIAOTIAN",
     tagline: "从角色语言到治愈系三维世界",
     meta: "IP 设计 · AIGC 场景 · 视觉叙事",
-    period: "2024.06—2024.08",
+    period: "2024.10—2025.02",
     image: "/project-ip-scenes.png",
     altImage: "/project-ip-hero.png",
     accent: "#b8d56a",
@@ -155,6 +156,8 @@ const bubbleMenuItems = [
 export default function Home() {
   const heroRef = useRef<HTMLElement>(null);
   const workListRef = useRef<HTMLDivElement>(null);
+  const aboutSectionRef = useRef<HTMLElement>(null);
+  const aboutLifeRef = useRef<HTMLDivElement>(null);
   const aboutShowcaseRef = useRef<HTMLDivElement>(null);
   const recordAudioRef = useRef<HTMLAudioElement>(null);
   const recordLineRef = useRef<HTMLSpanElement>(null);
@@ -168,6 +171,7 @@ export default function Home() {
   const [notice, setNotice] = useState("");
   const [recordPlaying, setRecordPlaying] = useState(false);
   const [recordTime, setRecordTime] = useState("0:00 / 0:10");
+  const [heroScene, setHeroScene] = useState<"desk" | "tidy" | "notebook">("desk");
 
   const showNotice = (message: string) => {
     setNotice(message);
@@ -349,67 +353,97 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const root = aboutShowcaseRef.current;
-    if (!root || window.matchMedia("(hover: none)").matches) return;
-    const you = root.querySelector<HTMLElement>(".cursor-you");
-    const shiqi = root.querySelector<HTMLElement>(".cursor-shiqi");
-    const entries = Array.from(root.querySelectorAll<HTMLElement>(".about-entry"));
-    if (!you || !shiqi) return;
+    if (window.matchMedia("(hover: none)").matches) return;
+    const section = aboutSectionRef.current;
+    const zones = [aboutLifeRef.current, aboutShowcaseRef.current]
+      .filter((zone): zone is HTMLDivElement => Boolean(zone));
+    const layer = section?.querySelector<HTMLElement>(".about-cursors-shared");
+    const you = layer?.querySelector<HTMLElement>(".cursor-you");
+    const shiqi = layer?.querySelector<HTMLElement>(".cursor-shiqi");
+    if (!section || !layer || !you || !shiqi || !zones.length) return;
 
     you.style.left = shiqi.style.left = "0px";
     you.style.right = shiqi.style.right = "auto";
     you.style.top = shiqi.style.top = "0px";
 
-    const size = () => ({ width: root.clientWidth, height: root.clientHeight });
-    let box = size();
-    let youTarget = { x: box.width * .78, y: 85 };
-    let youCurrent = { ...youTarget };
-    let shiqiTarget = { x: box.width * .63, y: 235 };
-    let shiqiCurrent = { ...shiqiTarget };
+    let activeZone: HTMLDivElement | null = null;
     let previewActive = false;
     let frame = 0;
+    let youTarget = { x: 0, y: 0 };
+    let youCurrent = { x: 0, y: 0 };
+    let shiqiTarget = { x: 0, y: 0 };
+    let shiqiCurrent = { x: 0, y: 0 };
 
-    const setDefaultShiqi = () => {
-      box = size();
-      shiqiTarget = { x: box.width * .63, y: 235 };
+    const geometry = (zone: HTMLDivElement) => {
+      const sectionRect = section.getBoundingClientRect();
+      const rect = zone.getBoundingClientRect();
+      return { rect, x: rect.left - sectionRect.left, y: rect.top - sectionRect.top };
+    };
+    const defaultShiqi = (zone: HTMLDivElement) => {
+      const { rect, x, y } = geometry(zone);
+      return { x: x + rect.width * .63, y: y + Math.min(235, rect.height - 62) };
+    };
+    const activate = (zone: HTMLDivElement, event?: PointerEvent) => {
+      const wasHidden = activeZone === null;
+      activeZone = zone;
       previewActive = false;
+      const { rect, x, y } = geometry(zone);
+      const pointer = event
+        ? { x: x + Math.max(0, Math.min(rect.width, event.clientX - rect.left)), y: y + Math.max(0, Math.min(rect.height, event.clientY - rect.top)) }
+        : { x: x + rect.width * .78, y: y + 85 };
+      youTarget = pointer;
+      shiqiTarget = defaultShiqi(zone);
+      if (wasHidden) {
+        youCurrent = { ...youTarget };
+        shiqiCurrent = { ...shiqiTarget };
+      }
+      layer.classList.add("is-active");
     };
-    const setSafeShiqi = () => {
-      box = size();
-      shiqiTarget = { x: box.width - 95, y: box.height - 62 };
-      previewActive = true;
-    };
-    const setYouTargetFromPointer = (event: PointerEvent) => {
-      if (event.pointerType === "touch") return;
-      const rect = root.getBoundingClientRect();
-      youTarget = {
-        x: Math.max(0, Math.min(rect.width, event.clientX - rect.left)),
-        y: Math.max(0, Math.min(rect.height, event.clientY - rect.top)),
-      };
-    };
-    const onMove = (event: PointerEvent) => setYouTargetFromPointer(event);
-    const onLeave = (event: PointerEvent) => {
-      if (event.pointerType === "touch") return;
-      const rect = root.getBoundingClientRect();
+    const deactivate = (zone: HTMLDivElement, event: PointerEvent) => {
+      if (activeZone !== zone || event.pointerType === "touch") return;
+      const related = event.relatedTarget;
+      if (related instanceof Node && zones.some((item) => item.contains(related))) return;
+      const { rect, x: offsetX, y: offsetY } = geometry(zone);
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       const exits = [
-        { distance: Math.abs(x), target: { x: -86, y: Math.max(0, Math.min(rect.height, y)) } },
-        { distance: Math.abs(rect.width - x), target: { x: rect.width + 86, y: Math.max(0, Math.min(rect.height, y)) } },
-        { distance: Math.abs(y), target: { x: Math.max(0, Math.min(rect.width, x)), y: -48 } },
-        { distance: Math.abs(rect.height - y), target: { x: Math.max(0, Math.min(rect.width, x)), y: rect.height + 48 } },
+        { distance: Math.abs(x), target: { x: offsetX - 86, y: offsetY + Math.max(0, Math.min(rect.height, y)) } },
+        { distance: Math.abs(rect.width - x), target: { x: offsetX + rect.width + 86, y: offsetY + Math.max(0, Math.min(rect.height, y)) } },
+        { distance: Math.abs(y), target: { x: offsetX + Math.max(0, Math.min(rect.width, x)), y: offsetY - 48 } },
+        { distance: Math.abs(rect.height - y), target: { x: offsetX + Math.max(0, Math.min(rect.width, x)), y: offsetY + rect.height + 48 } },
       ];
       exits.sort((a, b) => a.distance - b.distance);
       youTarget = exits[0].target;
+      activeZone = null;
+      previewActive = false;
+      layer.classList.remove("is-active");
     };
-    const maybeResetShiqi = () => window.setTimeout(() => {
-      const hovered = root.querySelector(".about-entry:hover");
-      const focused = document.activeElement instanceof HTMLElement && document.activeElement.closest(".about-entry");
-      if (!hovered && !focused) setDefaultShiqi();
+    const onMove = (zone: HTMLDivElement, event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      if (activeZone !== zone) activate(zone, event);
+      const { rect, x, y } = geometry(zone);
+      youTarget = {
+        x: x + Math.max(0, Math.min(rect.width, event.clientX - rect.left)),
+        y: y + Math.max(0, Math.min(rect.height, event.clientY - rect.top)),
+      };
+    };
+    const setSafeShiqi = (zone: HTMLDivElement) => {
+      activate(zone);
+      const { rect, x, y } = geometry(zone);
+      shiqiTarget = { x: x + rect.width - 95, y: y + rect.height - 62 };
+      previewActive = true;
+    };
+    const maybeResetShiqi = (zone: HTMLDivElement) => window.setTimeout(() => {
+      if (activeZone !== zone) return;
+      const hovered = zone.querySelector(".about-entry:hover");
+      const focused = document.activeElement instanceof HTMLElement && zone.contains(document.activeElement);
+      if (!hovered && !focused) {
+        shiqiTarget = defaultShiqi(zone);
+        previewActive = false;
+      }
     }, 0);
     const onResize = () => {
-      box = size();
-      if (!previewActive) shiqiTarget = { x: box.width * .63, y: 235 };
+      if (activeZone && !previewActive) shiqiTarget = defaultShiqi(activeZone);
     };
     const animate = (time: number) => {
       youCurrent.x += (youTarget.x - youCurrent.x) * .16;
@@ -424,28 +458,40 @@ export default function Home() {
       frame = window.requestAnimationFrame(animate);
     };
 
-    root.addEventListener("pointermove", onMove);
-    root.addEventListener("pointerleave", onLeave);
-    window.addEventListener("resize", onResize);
-    entries.forEach((entry) => {
-      entry.addEventListener("pointerenter", setSafeShiqi);
-      entry.addEventListener("pointerleave", maybeResetShiqi);
-      entry.addEventListener("focus", setSafeShiqi);
-      entry.addEventListener("blur", maybeResetShiqi);
+    const cleanups = zones.flatMap((zone) => {
+      const entries = Array.from(zone.querySelectorAll<HTMLElement>(".about-entry"));
+      const enter = (event: PointerEvent) => activate(zone, event);
+      const move = (event: PointerEvent) => onMove(zone, event);
+      const leave = (event: PointerEvent) => deactivate(zone, event);
+      zone.addEventListener("pointerenter", enter);
+      zone.addEventListener("pointermove", move);
+      zone.addEventListener("pointerleave", leave);
+      const entryCleanups = entries.map((entry) => {
+        const safe = () => setSafeShiqi(zone);
+        const reset = () => maybeResetShiqi(zone);
+        entry.addEventListener("pointerenter", safe);
+        entry.addEventListener("pointerleave", reset);
+        entry.addEventListener("focus", safe);
+        entry.addEventListener("blur", reset);
+        return () => {
+          entry.removeEventListener("pointerenter", safe);
+          entry.removeEventListener("pointerleave", reset);
+          entry.removeEventListener("focus", safe);
+          entry.removeEventListener("blur", reset);
+        };
+      });
+      return [() => {
+        zone.removeEventListener("pointerenter", enter);
+        zone.removeEventListener("pointermove", move);
+        zone.removeEventListener("pointerleave", leave);
+      }, ...entryCleanups];
     });
+    window.addEventListener("resize", onResize);
     frame = window.requestAnimationFrame(animate);
-
     return () => {
       window.cancelAnimationFrame(frame);
-      root.removeEventListener("pointermove", onMove);
-      root.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("resize", onResize);
-      entries.forEach((entry) => {
-        entry.removeEventListener("pointerenter", setSafeShiqi);
-        entry.removeEventListener("pointerleave", maybeResetShiqi);
-        entry.removeEventListener("focus", setSafeShiqi);
-        entry.removeEventListener("blur", maybeResetShiqi);
-      });
+      cleanups.forEach((cleanup) => cleanup());
     };
   }, []);
 
@@ -462,7 +508,7 @@ export default function Home() {
       <section
         ref={heroRef}
         onPointerMove={moveHero}
-        className="hero"
+        className={`hero hero-scene-${heroScene}`}
         id="top"
       >
         <div className="desk-collage desk-collage-left" aria-hidden="true">
@@ -490,6 +536,7 @@ export default function Home() {
           />
             <img className="desk-object desk-toolbar" src={withBasePath("/desk-toolbar.png")} alt="" aria-hidden="true" />
         </div>
+        <div className="desk-record-stage">
         <button
           className={`desk-object desk-record${recordPlaying ? " is-playing" : ""}`}
           onPointerEnter={queueRecordOnHover}
@@ -500,6 +547,7 @@ export default function Home() {
                 <span className="desk-record-vinyl"><img src={withBasePath("/desk-record-card.png")} alt="" /><img src={withBasePath("/desk-record-disc.png")} alt="" /></span>
           <span className="desk-record-copy"><small>Shiqi&apos;s desk</small><strong>灵感与专注</strong><span ref={recordLineRef} className="desk-record-line" /><small>{recordTime}</small></span>
         </button>
+        </div>
               <audio ref={recordAudioRef} id="deskRecordAudio" src={withBasePath("/audio/desk-lofi-jazz-10s.mp3")} preload="metadata" />
         <div className="airdrop-card-live" aria-label="灵感投送卡片">
           <div className="airdrop-heading"><strong>灵感投送</strong><small>我想和你分享一张设计便签</small></div>
@@ -508,21 +556,63 @@ export default function Home() {
         </div>
 
         <div className="hero-copy">
-          <p className="hero-eyebrow">UX / UI DESIGNER · 王诗琦</p>
-          <h1>Shiqi Wang</h1>
-          <p className="hero-statement">Product Design <i>Verb &amp; Noun</i></p>
-          <p className="hero-intro">I care about how people use products,<br />and whether every detail can naturally spark delight.</p>
-          <div className="hero-actions">
-            <a href="#projects">查看精选项目 <span>↓</span></a>
-            <a href={withBasePath("/resume.pdf?v=20260718")} target="_blank" rel="noreferrer">查看简历 ↗</a>
+          <div className="hero-copy-text">
+            <p className="hero-eyebrow">UX / UI DESIGNER · 王诗琦</p>
+            <h1>Shiqi Wang</h1>
+            <p className="hero-statement">Product Design <i>Verb &amp; Noun</i></p>
+            <p className="hero-intro">I care about how people use products,<br />and whether every detail can naturally spark delight.</p>
           </div>
         </div>
+        <div className="hero-scene-controls" role="group" aria-label="切换首页状态">
+            <button
+              type="button"
+              className="hero-scene-button hero-scene-button-desk"
+              aria-label="工作状态"
+              aria-pressed={heroScene === "desk"}
+              data-label="工作状态"
+              onClick={() => setHeroScene("desk")}
+            >
+              <svg className="scene-icon scene-icon-cup" viewBox="0 0 22 33.5" aria-hidden="true">
+                <path d="M2.5 20 3 27h14l.5-7m0 0h-16L.5 9.5H18.5M17.5 20h1l1-10.5h-1m0 0L19 4M19 4H1m18 0h1V.5H0V4h1m0 0 .5 5" transform="translate(1 4.5)" />
+                <path d="M.5 3 1 0l15.5 1.5 1 2" transform="translate(2 1)" />
+                <path d="M4 0C1.778 1 2.222 4 0 5" transform="translate(9 16)" strokeWidth="1.2" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="hero-scene-button hero-scene-button-tidy"
+              aria-label="整理状态"
+              aria-pressed={heroScene === "tidy"}
+              data-label="整理状态"
+              onClick={() => setHeroScene("tidy")}
+            >
+              <svg className="scene-icon scene-icon-broom" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M24 8.5v16m0 0h2V28h-4v-3.5Z" />
+                <path d="M14.5 32.5h18.804m0 0a29.8 29.8 0 0 1-.216-2.057A2.05 2.05 0 0 0 31.055 28.5H16.551a2.05 2.05 0 0 0-2.035 2.052C14.467 34.26 13.926 36.45 12.5 39.5H36c-1.583-2.629-2.334-4.598-2.696-7Z" />
+                <path d="M18.5 32.5V39M22 32.5V39M26 32.5V39M29.5 32.5V39" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="hero-scene-button hero-scene-button-notebook"
+              aria-label="灵感状态"
+              aria-pressed={heroScene === "notebook"}
+              data-label="灵感状态"
+              onClick={() => setHeroScene("notebook")}
+            >
+              <svg className="scene-icon scene-icon-pencil" viewBox="-1 -1 26 39" aria-hidden="true">
+                <path d="m13.974 5 .558-.995a4 4 0 0 1 5.458-1.511 4 4 0 0 1 1.458 5.489L20.848 9m-6.874-4-1.404 2.5m1.404-2.5 3.437 2L20.848 9m0 0-1.473 2.5m0 0-6.805-4m6.805 4-1.179 2L7.126 32.286a1 1 0 0 1-.337.344l-4.765 2.932A1 1 0 0 1 .5 34.71v-5.449a1 1 0 0 1 .128-.489L11.447 9.5l1.123-2m2.252 4L9.411 21l-1.353 2.375-.676 1.188M4 30.5l1.353-2.375.676-1.188" />
+                <path d="M0 4.5C1.382 4.607 2.052 4.885 3 6M0 1C1.777.522 2.506.901 3 2.75c1.757-.326 2.453.003 3 1.75" transform="translate(17 29)" />
+              </svg>
+            </button>
+          </div>
 
+        <NotebookTrail />
         <div className="hero-status"><i /> 现居长春 · 寻找 UX / UI 机会</div>
         <a className="scroll-hint" href="#about">SCROLL TO EXPLORE <span>↓</span></a>
       </section>
 
-      <section className="about" id="about">
+      <section className="about" id="about" ref={aboutSectionRef}>
         <div className="about-cooking about-shell">
           <h2><TextType text="Currently exploring ☺" className="section-type section-type-about" /></h2>
           <p className="cooking-project">
@@ -549,36 +639,46 @@ export default function Home() {
           <p className="cooking-status">Always curious. Always learning.<span aria-hidden="true">✦</span></p>
         </div>
 
+        <div className="about-life about-shell" id="about-life" ref={aboutLifeRef}>
+          <div className="about-life-showcase">
+            <a className="about-entry about-entry-project-link about-life-entry" href={withBasePath("/beyond-design")} style={{ "--row-accent": "#ff6348" } as CSSProperties} aria-label="查看设计之外的我">
+              <img className="about-entry-icon" src={withBasePath("/about-beyond-design-thumb.webp")} alt="设计之外页面中的生活照片" />
+              <div><strong>设计之外的我</strong><span>旅行 · 摄影 · 生活碎片</span></div>
+              <figure className="about-entry-preview about-life-preview"><img src={withBasePath("/about-beyond-design.png")} alt="王诗琦在旅行中的生活照片预览" /><figcaption>在设计之外，也认真收藏生活里的光、颜色和小惊喜。</figcaption></figure>
+            </a>
+          </div>
+        </div>
+
         <div className="about-recent about-shell" id="projects">
           <h2><TextType text="Recently Made ▶" className="section-type section-type-recent" /><small>最近做过的事</small></h2>
           <div className="about-showcase" ref={aboutShowcaseRef}>
             <div className="about-list">
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/color-call")} style={{ "--row-accent": "#25a7f0" } as CSSProperties} aria-label="查看炫彩通话小程序搭建项目">
             <img className="about-entry-icon" src={withBasePath("/work-color-call.png")} alt="炫彩通话项目缩略图" />
-                <div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.01—2026.04</span></div>
+                <div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.02—2026.05</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-color-call.png")} alt="炫彩通话小程序项目预览" /><figcaption>从需求理解到高保真交付，持续校准产品体验。</figcaption></figure>
               </a>
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/moguding")} style={{ "--row-accent": "#ff7a1a" } as CSSProperties} aria-label="查看蘑菇丁 APP 改版升级项目">
             <img className="about-entry-icon" src={withBasePath("/work-moguding.png")} alt="蘑菇丁项目缩略图" />
-                <div><strong>蘑菇丁 APP 改版升级</strong><span>UI 设计实习 · 2025.04—2025.09</span></div>
+                <div><strong>蘑菇丁 APP 改版升级</strong><span>UI 设计实习 · 2025.07—2025.11</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-moguding.png")} alt="蘑菇丁 APP 改版项目预览" /><figcaption>把复杂信息整理成更清晰、更容易行动的界面。</figcaption></figure>
               </a>
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/kugou")} style={{ "--row-accent": "#65d6f5" } as CSSProperties} aria-label="查看酷狗寻音季视觉设计项目">
             <img className="about-entry-icon" src={withBasePath("/project-kugou-season.png")} alt="酷狗寻音季项目缩略图" />
-                <div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2024.10—2025.02</span></div>
+                <div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2025.03—2025.06</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-kugou-season.png")} alt="酷狗寻音季活动视觉项目预览" /><figcaption>以清透天空色、音乐道具与品牌 IP，构建轻快的狂欢季活动视觉。</figcaption></figure>
               </a>
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/miaoxiaotian")} style={{ "--row-accent": "#b7d95a" } as CSSProperties} aria-label="查看喵小甜 IP 全链路设计项目">
             <img className="about-entry-icon" src={withBasePath("/work-ip.png")} alt="喵小甜 IP 项目缩略图" />
-                <div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.06—2024.08</span></div>
+                <div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.10—2025.02</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-ip-scenes.png")} alt="喵小甜 IP 全链路设计预览" /><figcaption>持续尝试让新技术拥有更亲和、更有温度的表达。</figcaption></figure>
               </a>
             </div>
-            <div className="about-cursors" aria-hidden="true">
-              <span className="cursor-you"><i />You</span>
-              <span className="cursor-shiqi"><i />Shiqi</span>
-            </div>
           </div>
+        </div>
+        <div className="about-cursors about-cursors-shared" aria-hidden="true">
+          <span className="cursor-you"><i />You</span>
+          <span className="cursor-shiqi"><i />Shiqi</span>
         </div>
       </section>
 
@@ -594,7 +694,7 @@ export default function Home() {
           <article className="experience-card experience-card-kugou" style={{ "--experience-accent": "#84ddf7" } as CSSProperties}>
             <header>
               <div><small>01 / 音乐 · 活动视觉</small><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div>
-              <div className="experience-meta"><span>2024.10—2025.02</span><span>广州</span></div>
+              <div className="experience-meta"><span>2025.03—2025.06</span><span>广州</span></div>
             </header>
             <div className="experience-body">
               <p className="experience-summary">完成“寻音季”主视觉与运营物料延展，建立年轻、轻盈的活动视觉语言。</p>
@@ -613,7 +713,7 @@ export default function Home() {
           <article className="experience-card" style={{ "--experience-accent": "#21ffc0" } as CSSProperties}>
             <header>
               <div><small>02 / 互联网 · 电子商务</small><h3>上海掌淘网络科技有限公司</h3><p>UI 设计实习生 · 设计部</p></div>
-              <div className="experience-meta"><span>2025.04—2025.09</span><span>上海</span></div>
+              <div className="experience-meta"><span>2025.07—2025.11</span><span>上海</span></div>
             </header>
             <div className="experience-body">
               <p className="experience-summary">围绕简历完善与投递意愿重构关键流程，并建立可复用的产品视觉规范。</p>
@@ -633,7 +733,7 @@ export default function Home() {
           <article className="experience-card experience-card-alt" style={{ "--experience-accent": "#b9d8ff" } as CSSProperties}>
             <header>
               <div><small>03 / 通信 · 数字体验</small><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div>
-              <div className="experience-meta"><span>2026.01—2026.04</span><span>浙江</span></div>
+              <div className="experience-meta"><span>2026.02—2026.05</span><span>浙江</span></div>
             </header>
             <div className="experience-body">
               <p className="experience-summary">负责炫彩通话小程序全链路体验，推动探索、创作与分享闭环落地。</p>
@@ -708,11 +808,16 @@ export default function Home() {
           </span>
           <audio ref={contactAudioRef} id="contactClickAudio" src={withBasePath("/audio/contact-click-sound.mp3")} preload="metadata" />
         </div>
-        <a className="email" href="mailto:3619554001@qq.com" aria-label="发送邮件到 3619554001@qq.com">
-          <span className="email-sticker" aria-hidden="true"><i></i><b>mail</b></span>
-          <span className="email-copy"><small>EMAIL / 写邮件</small><strong>3619554001@qq.com</strong></span>
-          <span className="email-arrow" aria-hidden="true">↗</span>
-        </a>
+        <div className="contact-actions">
+          <a className="email" href="mailto:3619554001@qq.com" aria-label="发送邮件到 3619554001@qq.com">
+            <span className="email-sticker" aria-hidden="true"><i></i><b>mail</b></span>
+            <span className="email-copy"><small>EMAIL / 写邮件</small><strong>3619554001@qq.com</strong></span>
+            <span className="email-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a className="contact-resume" href={withBasePath("/resume.pdf?v=20260831")} target="_blank" rel="noreferrer">
+            <span>查看简历</span><i aria-hidden="true">↗</i>
+          </a>
+        </div>
         <div className="contact-meta">
           <div><small>PHONE / WECHAT</small><a href="tel:19956642163">199 5664 2163</a></div>
           <div><small>LOCATION</small><p>安徽省池州市</p></div>

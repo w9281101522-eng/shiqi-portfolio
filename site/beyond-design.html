@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>设计之外｜王诗琦</title>
+  <link rel="stylesheet" href="app/projects/project-navigation.css?v=20260831-beyond-nav" />
+  <style>
+    *{box-sizing:border-box}html{scroll-behavior:auto;background:#000}html,body{margin:0;background:#000}body{overflow-x:hidden;font-family:"PingFang SC","Microsoft YaHei",sans-serif}.canvas{width:min(100%,1921px);margin:0 auto;background:#000}.canvas section,.canvas img{display:block;width:100%;margin:0}.canvas section{scroll-margin-top:0}.canvas img{height:auto}
+  </style>
+</head>
+<body>
+  <header class="project-top-nav" data-project="beyond-design">
+    <a class="project-top-nav__back" href="preview.html#about-life"><span aria-hidden="true">←</span><span>返回作品集</span></a>
+    <nav class="project-top-nav__links" aria-label="设计之外页面导航">
+      <a href="#top" data-active="true" aria-current="location">关于我</a>
+      <a href="#music">音乐</a>
+      <a href="#skiing">滑雪</a>
+      <a href="#photography">摄影</a>
+      <a href="#companions">动物伙伴</a>
+    </nav>
+    <span class="project-top-nav__index">LIFE 05</span>
+  </header>
+  <main class="canvas" aria-label="设计之外：我的爱好与生活">
+    <section id="top"><img src="public/beyond-design/section-01.png" width="1921" height="1800" alt="设计之外：我的爱好与生活" /></section>
+    <section id="music"><img src="public/beyond-design/section-02.png" width="1921" height="1800" alt="" /></section>
+    <section id="skiing"><img src="public/beyond-design/section-03.png" width="1921" height="1800" alt="" loading="lazy" /></section>
+    <section id="photography"><img src="public/beyond-design/section-04.png" width="1921" height="1800" alt="" loading="lazy" /></section>
+    <section id="companions"><img src="public/beyond-design/section-05.png" width="1921" height="1800" alt="" loading="lazy" /></section>
+    <section><img src="public/beyond-design/section-06.png" width="1921" height="1179" alt="" loading="lazy" /></section>
+  </main>
+  <script>
+    (()=>{
+      const dock=document.querySelector('.project-top-nav__links'),links=[...dock.querySelectorAll('a')],reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+      let pointer=Infinity,frame=0;
+      const state=links.map(()=>({scale:1,y:0}));
+      const animate=()=>{let moving=false;links.forEach((link,index)=>{const rect=link.getBoundingClientRect(),influence=Number.isFinite(pointer)?Math.max(0,1-Math.abs(pointer-(rect.left+rect.width/2))/140):0,targetScale=1+influence*.18,targetY=-influence*4,current=state[index];current.scale+=(targetScale-current.scale)*.22;current.y+=(targetY-current.y)*.22;if(Math.abs(targetScale-current.scale)>.001||Math.abs(targetY-current.y)>.02)moving=true;link.style.transform=`translateY(${current.y.toFixed(2)}px) scale(${current.scale.toFixed(4)})`});frame=moving?requestAnimationFrame(animate):0};
+      const request=()=>{if(!frame)frame=requestAnimationFrame(animate)};
+      if(!reduced){dock.addEventListener('pointermove',event=>{pointer=event.clientX;request()});dock.addEventListener('pointerleave',()=>{pointer=Infinity;request()})}
+      const update=()=>{const marker=innerHeight*.34;let active=links[0];links.forEach(link=>{const section=document.querySelector(link.getAttribute('href'));if(section&&section.getBoundingClientRect().top<=marker)active=link});links.forEach(link=>{const on=link===active;if(on){link.setAttribute('data-active','true');link.setAttribute('aria-current','location')}else{link.removeAttribute('data-active');link.removeAttribute('aria-current')}})};
+      addEventListener('scroll',update,{passive:true});addEventListener('resize',update);update()
+    })();
+  </script>
+</body>
+</html>

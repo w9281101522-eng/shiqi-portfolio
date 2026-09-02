@@ -1,0 +1,35 @@
+html:has(.beyond-design-page) {
+  background: #000;
+  scroll-behavior: auto;
+}
+
+body:has(.beyond-design-page) {
+  background: #000;
+}
+
+.beyond-design-page {
+  min-height: 100vh;
+  color: #fff;
+  background: #000;
+}
+
+.beyond-design-canvas {
+  width: min(100%, 1921px);
+  margin: 0 auto;
+  background: #000;
+}
+
+.beyond-design-section,
+.beyond-design-canvas img {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+.beyond-design-section {
+  scroll-margin-top: 0;
+}
+
+.beyond-design-canvas img {
+  height: auto;
+}

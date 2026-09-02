@@ -4,47 +4,687 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>王诗琦｜UX / UI 设计师</title>
-  <link rel="stylesheet" href="app/globals.css?v=20260727-39" />
+  <link rel="stylesheet" href="app/globals.css?v=20260902-desk-folder-left23" />
   <script src="public/vendor/matter.min.js"></script>
+  <style id="tidy-scene-final-alignment">
+    /* Final desktop alignment for the middle / tidy scene only. */
+    @media (min-width: 1000px) {
+      #top.hero-scene-tidy { --tidy-folder-top: 644px; }
+      #top .hero-scene-controls {
+        position: absolute !important;
+        left: 50% !important;
+        top: calc(100svh - 79px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 164px !important;
+        height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        z-index: 40 !important;
+        transform: translateX(-50%) !important;
+      }
+
+      #top .hero-scene-controls > button,
+      #top .hero-scene-controls > [role="button"] {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        border-radius: 12px !important;
+        transform: none !important;
+      }
+
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .hero-copy,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .hero-copy,
+      #top.is-tidy .hero-copy,
+      #top[data-scene="tidy"] .hero-copy,
+      #top[data-scene="clean"] .hero-copy {
+        position: static !important;
+      }
+
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .hero-copy-text,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .hero-copy-text,
+      #top.is-tidy .hero-copy-text,
+      #top[data-scene="tidy"] .hero-copy-text,
+      #top[data-scene="clean"] .hero-copy-text {
+        position: absolute !important;
+        top: 274px !important;
+        right: 30px !important;
+        left: auto !important;
+        width: 485px !important;
+        text-align: right !important;
+        gap: 6px !important;
+        z-index: 20 !important;
+        transform: none !important;
+      }
+
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .hero-copy-text > *,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .hero-copy-text > *,
+      #top.is-tidy .hero-copy-text > *,
+      #top[data-scene="tidy"] .hero-copy-text > *,
+      #top[data-scene="clean"] .hero-copy-text > * {
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
+      }
+
+
+
+
+
+
+      /* Bottom-right pair: same scale and common baseline. */
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .desk-inspiration,
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .desk-airdrop,
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .inspiration-card,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .desk-inspiration,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .desk-airdrop,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .inspiration-card,
+      #top.is-tidy .desk-inspiration, #top.is-tidy .desk-airdrop, #top.is-tidy .inspiration-card,
+      #top[data-scene="tidy"] .desk-inspiration, #top[data-scene="tidy"] .desk-airdrop, #top[data-scene="tidy"] .inspiration-card,
+      #top[data-scene="clean"] .desk-inspiration, #top[data-scene="clean"] .desk-airdrop, #top[data-scene="clean"] .inspiration-card {
+        left: 832px !important; top: 588px !important; width: 178px !important; height: 206px !important;
+        transform: none !important;
+      }
+      #top:has(.hero-scene-controls > :nth-child(2)[aria-pressed="true"]) .desk-folder,
+      #top:has(.hero-scene-controls > :nth-child(2).is-active) .desk-folder,
+      #top.is-tidy .desk-folder,
+      #top[data-scene="tidy"] .desk-folder,
+      #top[data-scene="clean"] .desk-folder {
+        left: calc(100% - 230px) !important; right: auto !important; top: var(--tidy-folder-top) !important; width: 192px !important; height: 194px !important;
+        object-fit: contain !important; transform: none !important;
+      }
+    }
+  </style>
+<style id="tidy-scene-precision-v6">
+/* 2026-08-25 — precise tidy-desk composition.  Scoped to the tidy scene only. */
+#top .hero-scene-controls{
+  position:absolute!important;
+  left:50%!important;
+  top:68vh!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:auto!important;
+  transform:translateX(-50%)!important;
+  display:flex!important;
+  gap:10px!important;
+  z-index:40!important;
+}
+#top .hero-scene-controls button{
+  width:52px!important;
+  height:52px!important;
+  min-width:52px!important;
+  padding:0!important;
+  border-radius:10px!important;
+}
+
+#top.tidy-scene-active .hero-copy-text,
+#top:is([data-desk-scene="tidy"],[data-desk-scene="clean"],[data-scene="tidy"],[data-scene="clean"],.scene-tidy,.scene-clean,.is-tidy,.is-clean) .hero-copy-text{
+  position:absolute!important;
+  left:auto!important;
+  right:2.8vw!important;
+  top:39vh!important;
+  width:43vw!important;
+  max-width:610px!important;
+  text-align:right!important;
+  align-items:flex-end!important;
+  z-index:12!important;
+}
+#top.tidy-scene-active .hero-copy-text > *,
+#top:is([data-desk-scene="tidy"],[data-desk-scene="clean"],[data-scene="tidy"],[data-scene="clean"],.scene-tidy,.scene-clean,.is-tidy,.is-clean) .hero-copy-text > *{
+  margin-top:5px!important;
+  margin-bottom:5px!important;
+}
+
+
+
+
+#top.tidy-scene-active :is(.desk-inspiration,.desk-airdrop,.inspiration-card),
+#top:is([data-desk-scene="tidy"],[data-desk-scene="clean"],[data-scene="tidy"],[data-scene="clean"],.scene-tidy,.scene-clean,.is-tidy,.is-clean) :is(.desk-inspiration,.desk-airdrop,.inspiration-card){
+  left:66vw!important; top:84.5vh!important; width:178px!important; height:205px!important;
+  transform:none!important; object-fit:contain!important;
+}
+#top.tidy-scene-active .desk-folder,
+#top:is([data-desk-scene="tidy"],[data-desk-scene="clean"],[data-scene="tidy"],[data-scene="clean"],.scene-tidy,.scene-clean,.is-tidy,.is-clean) .desk-folder{
+  left:81.5vw!important; top:85.8vh!important; width:188px!important; height:188px!important;
+  transform:none!important; object-fit:contain!important;
+}
+
+@media (max-width:900px){
+  #top .hero-scene-controls{top:72vh!important;transform:translateX(-50%) scale(.88)!important}
+}
+</style>
+<style id="tidy-scene-final-annotated-layout">
+  /* Final desktop arrangement — scoped to the tidy/clean scene only. */
+  @media (min-width: 1000px) {
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) {
+      min-height: 800px;
+      overflow: hidden;
+    }
+
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .desk-object {
+      transition: left .72s cubic-bezier(.22,1,.36,1), top .72s cubic-bezier(.22,1,.36,1), width .72s cubic-bezier(.22,1,.36,1), height .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1) !important;
+    }
+
+
+
+
+    /* Compact right-aligned copy. */
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .hero-copy {
+      left: auto !important; right: 3.4% !important; top: 38.5% !important; width: 42% !important;
+      text-align: right !important; align-items: flex-end !important;
+    }
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .hero-copy-text {
+      gap: 7px !important; row-gap: 7px !important; text-align: right !important;
+    }
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .hero-copy-text > * {
+      margin-top: 0 !important; margin-bottom: 7px !important;
+    }
+
+    /* Controls stay fixed below the central copy and use square hand-drawn buttons. */
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .hero-scene-controls {
+      position: absolute !important; left: 43.1% !important; right: auto !important; top: 68.2% !important;
+      transform: none !important; gap: 10px !important; z-index: 40 !important;
+    }
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .hero-scene-controls button {
+      width: 50px !important; height: 50px !important; min-width: 50px !important; border-radius: 9px !important;
+    }
+
+
+    /* Inspiration card and folder share a baseline below the copy. */
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) :is(.desk-inspiration, .desk-inspiration-card, .desk-airdrop, .desk-prompt-card) {
+      left: 66.2% !important; top: 83.6% !important; width: 174px !important; height: auto !important; transform: rotate(0deg) !important;
+    }
+    :is(body.tidy-scene-active #top, #top.tidy-scene-active, #top.is-tidy, #top[data-scene="tidy"], body[data-desk-scene="tidy"] #top) .desk-folder {
+      left: 82.0% !important; top: 83.6% !important; width: 188px !important; height: auto !important; transform: rotate(0deg) !important;
+    }
+  }
+</style>
+<style id="tidy-scene-annotated-final-v5">
+@media (min-width: 1100px) {
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) {
+    min-height: 860px;
+    position: relative;
+  }
+
+
+
+
+  /* 右侧文字：保持右对齐，并压缩上下留白 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-copy {
+    left: auto !important;
+    right: 3.6% !important;
+    top: 38.2% !important;
+    width: 48.5% !important;
+    text-align: right !important;
+    align-items: flex-end !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-copy-text {
+    gap: 7px !important;
+    align-items: flex-end !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-copy-text > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* 场景按钮固定在中央下方，外框改为方形圆角 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-scene-controls {
+    position: absolute !important;
+    left: 43.2% !important;
+    right: auto !important;
+    top: 68.2% !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-scene-controls button {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 8px !important;
+  }
+
+/* 左下：本子正放、咖啡印落在纸面、护手霜竖直置于右侧 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .desk-paper {
+    left: -1.2% !important;
+    top: 72.2% !important;
+    width: 31.5% !important;
+    height: auto !important;
+    transform: none !important;
+  }
+
+  /* 右下：灵感投送卡与文件夹等高、同基线横向排列 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) :is(.desk-airdrop, .desk-inspiration, .desk-inspiration-card, .desk-prompt-card) {
+    left: 66.2% !important;
+    top: 82.8% !important;
+    width: 174px !important;
+    height: 190px !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .desk-folder {
+    left: 82.0% !important;
+    top: 82.8% !important;
+    width: 186px !important;
+    height: 190px !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+}
+</style>
+<style id="tidy-scene-annotated-final-v6">
+/* 整理桌面：严格按 1263×698 标注稿布置，仅影响整理模式和桌面宽度。 */
+@media (min-width: 900px) {
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) {
+    min-height: max(100vh, 820px) !important;
+    overflow: hidden !important;
+  }
+
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .desk-object {
+    transition: left .78s cubic-bezier(.2,.75,.2,1), top .78s cubic-bezier(.2,.75,.2,1), right .78s cubic-bezier(.2,.75,.2,1), bottom .78s cubic-bezier(.2,.75,.2,1), width .78s cubic-bezier(.2,.75,.2,1), height .78s cubic-bezier(.2,.75,.2,1), transform .55s cubic-bezier(.2,.75,.2,1) !important;
+  }
+
+
+
+
+  /* 右侧文字收紧行距；按钮留在标注的固定位置。 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-copy {
+    left: auto !important; right: 3.5% !important; top: 38.0% !important; bottom: auto !important;
+    width: 48.5% !important; text-align: right !important; align-items: flex-end !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-copy-text {
+    gap: 4px !important; row-gap: 4px !important; text-align: right !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-copy-text > * {
+    margin-top: 0 !important; margin-bottom: 0 !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-scene-controls {
+    position: absolute !important; left: 43.0% !important; top: 68.2% !important; right: auto !important; bottom: auto !important;
+    transform: none !important; gap: 10px !important; z-index: 30 !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .hero-scene-controls button {
+    width: 52px !important; height: 52px !important; min-width: 52px !important; border-radius: 8px !important;
+  }
+
+/* 左下本子正放；咖啡印落在页面内；护手霜竖直放在右侧。 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .desk-paper {
+    left: -1.2% !important; top: 72.0% !important; right: auto !important; bottom: auto !important;
+    width: 31.4% !important; height: auto !important; transform: rotate(0deg) !important;
+  }
+
+  /* 右下：卡片与文件夹同高、同一基线、间距均匀。 */
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) :is(.desk-card, .desk-airdrop, .desk-inspiration, .desk-inspiration-card, .desk-prompt-card) {
+    left: 66.1% !important; top: 82.8% !important; right: auto !important; bottom: auto !important;
+    width: 174px !important; height: 190px !important; object-fit: contain !important; transform: none !important;
+  }
+  :is(#top.tidy-scene-active, #top.is-tidy, #top.scene-clean, #top[data-scene="tidy"], body.tidy-scene-active #top, body.scene-clean #top) .desk-folder {
+    left: 82.0% !important; top: 82.8% !important; right: auto !important; bottom: auto !important;
+    width: 186px !important; height: 190px !important; object-fit: contain !important; transform: none !important;
+  }
+}
+</style>
+<style id="codex-tidy-layout-v7-final">
+@media (min-width: 901px) {
+  body.codex-tidy-v7 #top {
+    height: max(100vh, 700px) !important;
+    min-height: 700px !important;
+  }
+
+
+
+
+  body.codex-tidy-v7 #top .desk-share,
+  body.codex-tidy-v7 #top .desk-airdrop,
+  body.codex-tidy-v7 #top .desk-inspiration,
+  body.codex-tidy-v7 #top .inspiration-card,
+  body.codex-tidy-v7 #top .hero-inspiration-card,
+  body.codex-tidy-v7 #top [class*="inspiration-card"],
+  body.codex-tidy-v7 #top [class*="airdrop"] {
+    top: 83.8% !important;
+  }
+
+  body.codex-tidy-v7 #top .desk-folder {
+    top: 83.8% !important;
+  }
+}
+</style>
+  <style id="codex-tidy-layout-v9">
+    /* Final desktop calibration for the user-selected "tidy desk" scene only. */
+    @media (min-width: 901px) {
+      body.codex-tidy-v8 #top {
+        min-height: 820px !important;
+        overflow: hidden !important;
+      }
+
+      body.codex-tidy-v8 #top .hero-copy-text {
+        top: 282px !important;
+        right: 3.2% !important;
+        width: 40.5% !important;
+        text-align: right !important;
+      }
+
+      body.codex-tidy-v8 #top .hero-copy-text > * {
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
+      }
+
+      body.codex-tidy-v8 #top .hero-copy-text h1 {
+        margin-bottom: 12px !important;
+      }
+
+      body.codex-tidy-v8 #top .hero-copy-text p:last-child {
+        margin-bottom: 0 !important;
+      }
+
+      body.codex-tidy-v8 #top .hero-scene-controls {
+        left: 50% !important;
+        top: 485px !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: translateX(-50%) !important;
+        gap: 10px !important;
+      }
+
+      body.codex-tidy-v8 #top .hero-scene-controls button {
+        width: 52px !important;
+        height: 52px !important;
+        border-radius: 8px !important;
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+      body.codex-tidy-v8 #top .desk-share {
+        left: auto !important;
+        right: 20.5% !important;
+        top: 608px !important;
+        width: 184px !important;
+        height: 196px !important;
+        object-fit: contain !important;
+      }
+
+      body.codex-tidy-v8 #top .desk-folder {
+        left: auto !important;
+        right: 3.2% !important;
+        top: 608px !important;
+        width: 184px !important;
+        height: 196px !important;
+        object-fit: contain !important;
+      }
+    }
+  </style>
+<style id="codex-tidy-layout-v10">
+@media (min-width: 901px) {
+  body.codex-tidy-v8 #top {
+    min-height: 820px !important;
+    overflow: hidden !important;
+  }
+
+  body.codex-tidy-v8 #top .hero-copy {
+    top: 278px !important;
+    right: 2.5% !important;
+    width: 41.5% !important;
+    min-height: 0 !important;
+    display: block !important;
+    text-align: right !important;
+  }
+
+  body.codex-tidy-v8 #top .hero-copy-text {
+    gap: 6px !important;
+  }
+
+  body.codex-tidy-v8 #top .hero-kicker,
+  body.codex-tidy-v8 #top .hero-subtitle,
+  body.codex-tidy-v8 #top .hero-tagline,
+  body.codex-tidy-v8 #top .hero-description {
+    margin-block: 7px !important;
+  }
+
+  body.codex-tidy-v8 #top .hero-scene-controls {
+    left: 49.4% !important;
+    top: 486px !important;
+    gap: 10px !important;
+  }
+
+  body.codex-tidy-v8 #top .hero-scene-button {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 7px !important;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  body.codex-tidy-v8 #top .desk-share-card {
+    right: 20.5% !important;
+    top: 606px !important;
+    width: 184px !important;
+    height: 196px !important;
+  }
+
+  body.codex-tidy-v8 #top .desk-folder {
+    right: 3.2% !important;
+    top: 606px !important;
+    width: 184px !important;
+    height: 196px !important;
+  }
+}
+</style>
+<style id="codex-tidy-layout-v11">
+@media (min-width: 901px) {
+  body.codex-tidy-v8 #top {
+    min-height: 820px !important;
+    overflow: hidden !important;
+  }
+
+  /* 右侧文字：保持右对齐，同时压缩上下节奏 */
+  body.codex-tidy-v8 #top .hero-copy {
+    top: 278px !important;
+    right: 2.5% !important;
+    width: 41.5% !important;
+    min-height: 0 !important;
+    display: block !important;
+    text-align: right !important;
+  }
+  body.codex-tidy-v8 #top .hero-copy-text {
+    gap: 4px !important;
+  }
+  body.codex-tidy-v8 #top .hero-copy-text > * {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* 三个场景按钮固定在文字下方，改为方形轮廓 */
+  body.codex-tidy-v8 #top .hero-scene-controls {
+    position: absolute !important;
+    left: 49.4% !important;
+    top: 486px !important;
+    width: auto !important;
+    transform: translateX(-50%) !important;
+    gap: 10px !important;
+    z-index: 30 !important;
+  }
+  body.codex-tidy-v8 #top .hero-scene-controls button {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    border-radius: 7px !important;
+  }
+
+
+
+
+
+  /* 右下角：灵感投送与文件夹等高并横向对齐 */
+  body.codex-tidy-v8 #top .desk-share,
+  body.codex-tidy-v8 #top .desk-airdrop,
+  body.codex-tidy-v8 #top .desk-inspiration,
+  body.codex-tidy-v8 #top .inspiration-card,
+  body.codex-tidy-v8 #top .desk-share-card {
+    left: auto !important;
+    right: 20.5% !important;
+    top: 606px !important;
+    width: 184px !important;
+    height: 196px !important;
+    transform: none !important;
+  }
+  body.codex-tidy-v8 #top .desk-folder {
+    left: auto !important;
+    right: 3.2% !important;
+    top: 606px !important;
+    width: 184px !important;
+    height: 196px !important;
+    transform: none !important;
+  }
+}
+</style>
+<style id="hero-scene-switcher-final">
+  html body #top#top.hero-scene-desk .hero-copy.hero-copy,
+  html body #top#top.hero-scene-tidy .hero-copy.hero-copy,
+  html body #top#top.hero-scene-notebook .hero-copy.hero-copy {
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: 42% !important;
+    width: min(620px, 50vw) !important;
+    height: auto !important;
+    text-align: center !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  html body #top#top.hero-scene-notebook .hero-copy.hero-copy {
+    left: 52% !important;
+    top: 27% !important;
+    width: min(620px, 52vw) !important;
+  }
+  html body #top#top.hero-scene-desk .hero-copy-text.hero-copy-text,
+  html body #top#top.hero-scene-notebook .hero-copy-text.hero-copy-text {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    margin: 0 !important;
+    text-align: center !important;
+    transform: none !important;
+  }
+  html body #top#top.hero-scene-tidy .hero-copy-text.hero-copy-text {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: min(520px, 42vw) !important;
+    margin: 0 0 0 auto !important;
+    text-align: right !important;
+    transform: translateX(clamp(270px, 25vw, 430px)) !important;
+  }
+  html body #top#top .hero-scene-controls.hero-scene-controls {
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: calc(100svh - 79px) !important;
+    bottom: auto !important;
+    display: flex !important;
+    width: 164px !important;
+    height: 48px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    transform: translateX(-50%) !important;
+  }
+  html body #top#top .hero-scene-controls.hero-scene-controls .hero-scene-button {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 12px !important;
+  }
+  html body #top#top .hero-scene-controls.hero-scene-controls .hero-scene-button[aria-pressed="true"] {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+  }
+</style>
+  <link rel="stylesheet" href="app/notebook-trail.css?v=20260902-notebook-cursor" />
+  <link rel="stylesheet" href="app/notebook-scene.css?v=20260902-notebook-reference" />
 </head>
 <body>
 <main>
   <header class="site-nav"><a class="brand" href="#top">WSQ<span>®</span></a><nav class="dock-nav" aria-label="主导航"><a href="#about">关于我</a><a href="#projects">精选项目</a><a href="#experience">实习经历</a><a href="#capabilities">专业能力</a><a href="#contact">联系</a></nav><div class="bubble-menu-root" id="bubbleMenuRoot"><button class="bubble-menu-toggle" id="bubbleMenuBtn" aria-label="打开导航菜单" aria-expanded="false" aria-controls="bubble-menu-overlay"><span>菜单</span><i aria-hidden="true"><b></b><b></b></i></button></div></header>
   <div class="bubble-menu-overlay" id="bubble-menu-overlay" aria-hidden="true"><nav class="bubble-menu-pills" aria-label="展开导航"><a class="bubble-menu-pill" href="#about" style="--bubble-rotation:-4deg;--bubble-hover-bg:#21ffc0;--bubble-hover-color:#171717;--bubble-index:0" tabindex="-1"><span>关于我</span><small>01</small></a><a class="bubble-menu-pill" href="#projects" style="--bubble-rotation:3deg;--bubble-hover-bg:#b9d8ff;--bubble-hover-color:#171717;--bubble-index:1" tabindex="-1"><span>精选项目</span><small>02</small></a><a class="bubble-menu-pill" href="#experience" style="--bubble-rotation:-2deg;--bubble-hover-bg:#ffb7cd;--bubble-hover-color:#171717;--bubble-index:2" tabindex="-1"><span>实习经历</span><small>03</small></a><a class="bubble-menu-pill" href="#capabilities" style="--bubble-rotation:3deg;--bubble-hover-bg:#fff08a;--bubble-hover-color:#171717;--bubble-index:3" tabindex="-1"><span>专业能力</span><small>04</small></a><a class="bubble-menu-pill" href="#contact" style="--bubble-rotation:-4deg;--bubble-hover-bg:#00bbff;--bubble-hover-color:#ffffff;--bubble-index:4" tabindex="-1"><span>联系</span><small>05</small></a></nav></div>
 
-  <section class="hero" id="top">
+  <section class="hero hero-scene-desk" id="top" data-scene="desk">
     <div class="desk-collage desk-collage-left"><img class="desk-object desk-paper desk-static" src="public/desk-paper.png" alt=""><img class="desk-object desk-lamp" src="public/desk-lamp.png" alt=""><img class="desk-object desk-note" src="public/desk-note.png" alt=""><img class="desk-object desk-notebook desk-static" src="public/desk-notebook.png" alt=""><img class="desk-object desk-pen" src="public/desk-pen.png" alt=""><img class="desk-object desk-coffee" src="public/desk-coffee.png" alt=""><img class="desk-object desk-film" src="public/desk-film.png" alt=""><img class="desk-object desk-lighter" src="public/desk-lighter.png" alt=""><img class="desk-object desk-cream" src="public/desk-cream.png" alt=""></div><div class="desk-collage desk-collage-right"><img class="desk-object desk-cursor" src="public/desk-cursor.png" alt=""><div class="rb-folder-host desk-folder" style="--folder-scale:2"><div class="rb-folder-stage"><div class="rb-folder" data-folder role="button" tabindex="0" aria-expanded="false" aria-label="打开灵感文件夹" style="--folder-color:#25A7F0;--folder-back-color:#2195D6;--paper-1:#E9F5FA;--paper-2:#F6EEDB;--paper-3:#FFFFFF"><div class="rb-folder__back"><div class="rb-paper rb-paper-1"><img class="folder-app-icon" src="public/folder-after-effects.png" alt="After Effects"></div><div class="rb-paper rb-paper-2"><img class="folder-app-icon" src="public/folder-codex-clean.png" alt="Codex"></div><div class="rb-paper rb-paper-3"><img class="folder-app-icon" src="public/folder-figma.png" alt="Figma"></div><div class="rb-folder__front"></div><div class="rb-folder__front rb-folder__front--right"></div></div></div></div></div><img class="desk-object desk-toolbar" src="public/desk-toolbar.png" alt=""></div>
-    <button class="desk-object desk-record" data-notice="当前播放：灵感与专注 ♫" aria-label="播放音乐《灵感与专注》" aria-pressed="false"><span class="desk-record-vinyl"><img src="public/desk-record-card.png" alt=""><img src="public/desk-record-disc.png" alt=""></span><span class="desk-record-copy"><small>Shiqi's desk</small><strong>灵感与专注</strong><span class="desk-record-line" aria-hidden="true"></span><small data-audio-time>0:00 / 0:10</small></span></button><audio id="deskRecordAudio" src="public/audio/desk-lofi-jazz-10s.mp3" preload="metadata"></audio><div class="airdrop-card-live" aria-label="灵感投送卡片"><div class="airdrop-heading"><strong>灵感投送</strong><small>我想和你分享一张设计便签</small></div><div class="airdrop-content">清晰 · 好用 · 有趣</div><div class="airdrop-actions"><button data-notice="这份灵感会继续留在案头">暂不</button><button data-notice="已收到这份灵感投送 ✦">接收</button></div></div>
-    <div class="hero-copy"><p class="hero-eyebrow">UX / UI DESIGNER · 王诗琦</p><h1>Shiqi Wang</h1><p class="hero-statement">Product Design <i>Verb &amp; Noun</i></p><p class="hero-intro">I care about how people use products,<br>and whether every detail can naturally spark delight.</p><div class="hero-actions"><a href="#projects">查看精选项目 <span>↘</span></a><a href="public/resume.pdf?v=20260718" target="_blank">查看简历 ↗</a></div></div>
+    <div class="desk-record-stage"><button class="desk-object desk-record" data-notice="当前播放：灵感与专注 ♫" aria-label="播放音乐《灵感与专注》" aria-pressed="false"><span class="desk-record-vinyl"><img src="public/desk-record-card.png" alt=""><img src="public/desk-record-disc.png" alt=""></span><span class="desk-record-copy"><small>Shiqi's desk</small><strong>灵感与专注</strong><span class="desk-record-line" aria-hidden="true"></span><small data-audio-time>0:00 / 0:10</small></span></button></div><audio id="deskRecordAudio" src="public/audio/desk-lofi-jazz-10s.mp3" preload="metadata"></audio><div class="airdrop-card-live" aria-label="灵感投送卡片"><div class="airdrop-heading"><strong>灵感投送</strong><small>我想和你分享一张设计便签</small></div><div class="airdrop-content">清晰 · 好用 · 有趣</div><div class="airdrop-actions"><button data-notice="这份灵感会继续留在案头">暂不</button><button data-notice="已收到这份灵感投送 ✦">接收</button></div></div>
+    <div class="hero-copy"><div class="hero-copy-text"><p class="hero-eyebrow">UX / UI DESIGNER · 王诗琦</p><h1>Shiqi Wang</h1><p class="hero-statement">Product Design <i>Verb &amp; Noun</i></p><p class="hero-intro">I care about how people use products,<br>and whether every detail can naturally spark delight.</p></div></div><div class="hero-scene-controls" role="group" aria-label="切换首页状态"><button type="button" class="hero-scene-button hero-scene-button-desk" aria-label="工作状态" aria-pressed="true" data-scene-target="desk" data-label="工作状态"><svg class="scene-icon scene-icon-cup" viewBox="0 0 22 33.5" aria-hidden="true"><path d="M2.5 20 3 27h14l.5-7m0 0h-16L.5 9.5H18.5M17.5 20h1l1-10.5h-1m0 0L19 4M19 4H1m18 0h1V.5H0V4h1m0 0 .5 5" transform="translate(1 4.5)"></path><path d="M.5 3 1 0l15.5 1.5 1 2" transform="translate(2 1)"></path><path d="M4 0C1.778 1 2.222 4 0 5" transform="translate(9 16)" stroke-width="1.2"></path></svg></button><button type="button" class="hero-scene-button hero-scene-button-tidy" aria-label="整理状态" aria-pressed="false" data-scene-target="tidy" data-label="整理状态"><svg class="scene-icon scene-icon-broom" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8.5v16m0 0h2V28h-4v-3.5Z"></path><path d="M14.5 32.5h18.804m0 0a29.8 29.8 0 0 1-.216-2.057A2.05 2.05 0 0 0 31.055 28.5H16.551a2.05 2.05 0 0 0-2.035 2.052C14.467 34.26 13.926 36.45 12.5 39.5H36c-1.583-2.629-2.334-4.598-2.696-7Z"></path><path d="M18.5 32.5V39M22 32.5V39M26 32.5V39M29.5 32.5V39"></path></svg></button><button type="button" class="hero-scene-button hero-scene-button-notebook" aria-label="灵感状态" aria-pressed="false" data-scene-target="notebook" data-label="灵感状态"><svg class="scene-icon scene-icon-pencil" viewBox="-1 -1 26 39" aria-hidden="true"><path d="m13.974 5 .558-.995a4 4 0 0 1 5.458-1.511 4 4 0 0 1 1.458 5.489L20.848 9m-6.874-4-1.404 2.5m1.404-2.5 3.437 2L20.848 9m0 0-1.473 2.5m0 0-6.805-4m6.805 4-1.179 2L7.126 32.286a1 1 0 0 1-.337.344l-4.765 2.932A1 1 0 0 1 .5 34.71v-5.449a1 1 0 0 1 .128-.489L11.447 9.5l1.123-2m2.252 4L9.411 21l-1.353 2.375-.676 1.188M4 30.5l1.353-2.375.676-1.188"></path><path d="M0 4.5C1.382 4.607 2.052 4.885 3 6M0 1C1.777.522 2.506.901 3 2.75c1.757-.326 2.453.003 3 1.75" transform="translate(17 29)"></path></svg></button></div>
+    <div class="hero-status"><i></i> 现居长春 · 寻找 UX / UI 机会</div><a class="scroll-hint" href="#about">SCROLL TO EXPLORE <span>↓</span></a>
   </section>
 
   <section class="about" id="about">
     <div class="about-cooking about-shell"><h2><span class="text-type section-type section-type-about" data-text-type="Currently exploring ☺" aria-label="Currently exploring ☺"><span class="text-type__content" aria-hidden="true">Currently exploring <span class="text-type__symbol">☺</span></span><span class="text-type__cursor" aria-hidden="true"></span></span></h2><p class="cooking-project">Learning from the details that shape <span class="cooking-sticker" role="img" aria-label="Pencil sticker" tabindex="0">✎</span><span class="cooking-fuzzy"><canvas class="cooking-fuzzy-canvas" data-fuzzy-text="The Little Things," role="img" aria-label="The Little Things," tabindex="0"></canvas></span></p><p class="cooking-description">I collect observations, test ideas &amp; refine the moments that make digital experiences feel clear and warm.</p><p class="cooking-status">Always curious. Always learning.<span aria-hidden="true">✦</span></p></div>
+    <div class="about-life about-shell" id="about-life"><div class="about-life-showcase"><a class="about-entry about-entry-project-link about-life-entry" href="beyond-design.html" style="--row-accent:#ff6348" aria-label="查看设计之外的我"><img class="about-entry-icon" src="public/about-beyond-design-thumb.webp" alt="设计之外页面中的生活照片"><div><strong>设计之外的我</strong><span>旅行 · 摄影 · 生活碎片</span></div><figure class="about-entry-preview about-life-preview"><img src="public/about-beyond-design.png" alt="王诗琦在旅行中的生活照片预览"><figcaption>在设计之外，也认真收藏生活里的光、颜色和小惊喜。</figcaption></figure></a></div></div>
     <div class="about-recent about-shell" id="projects"><h2><span class="text-type section-type section-type-recent" data-text-type="Recently Made ▶" aria-label="Recently Made ▶"><span class="text-type__content" aria-hidden="true">Recently Made ▶</span><span class="text-type__cursor" aria-hidden="true"></span></span><small>最近做过的事</small></h2><div class="about-showcase"><div class="about-list">
-      <article class="about-entry" tabindex="0" style="--row-accent:#25a7f0"><img class="about-entry-icon" src="public/work-color-call.png" alt="炫彩通话项目缩略图"><div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.01—2026.04</span></div><figure class="about-entry-preview"><img src="public/project-color-call.png" alt="炫彩通话小程序项目预览"><figcaption>从需求理解到高保真交付，持续校准产品体验。</figcaption></figure></article>
-      <article class="about-entry" tabindex="0" style="--row-accent:#ff7a1a"><img class="about-entry-icon" src="public/work-moguding.png" alt="蘑菇丁项目缩略图"><div><strong>蘑菇丁 APP 改版升级</strong><span>UI 设计实习 · 2025.04—2025.09</span></div><figure class="about-entry-preview"><img src="public/project-moguding.png" alt="蘑菇丁 APP 改版项目预览"><figcaption>把复杂信息整理成更清晰、更容易行动的界面。</figcaption></figure></article>
-      <a class="about-entry about-entry-project-link" href="/projects/kugou" style="--row-accent:#65d6f5" aria-label="查看酷狗寻音季视觉设计项目"><img class="about-entry-icon" src="public/project-kugou-season.png" alt="酷狗寻音季项目缩略图"><div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2024.10—2025.02</span></div><figure class="about-entry-preview"><img src="public/project-kugou-season.png" alt="酷狗寻音季活动视觉项目预览"><figcaption>以清透天空色、音乐道具与品牌 IP，构建轻快的狂欢季活动视觉。</figcaption></figure></a>
-      <a class="about-entry about-entry-project-link" href="/projects/miaoxiaotian" style="--row-accent:#b7d95a" aria-label="查看喵小甜 IP 全链路设计项目"><img class="about-entry-icon" src="public/work-ip.png" alt="喵小甜 IP 项目缩略图"><div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.06—2024.08</span></div><figure class="about-entry-preview"><img src="public/project-ip-scenes.png" alt="喵小甜 IP 全链路设计预览"><figcaption>持续尝试让新技术拥有更亲和、更有温度的表达。</figcaption></figure></a>
-    </div><div class="about-cursors" aria-hidden="true"><span class="cursor-you"><i></i>You</span><span class="cursor-shiqi"><i></i>Shiqi</span></div></div></div>
+      <a class="about-entry about-entry-project-link" href="/out/projects/color-call/" style="--row-accent:#25a7f0" aria-label="查看炫彩通话小程序搭建项目"><img class="about-entry-icon" src="public/work-color-call.png" alt="炫彩通话项目缩略图"><div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.02—2026.05</span></div><figure class="about-entry-preview"><img src="public/project-color-call.png" alt="炫彩通话小程序项目预览"><figcaption>从需求理解到高保真交付，持续校准产品体验。</figcaption></figure></a>
+      <a class="about-entry about-entry-project-link" href="/out/projects/moguding/" style="--row-accent:#ff7a1a" aria-label="查看蘑菇丁 APP 改版升级项目"><img class="about-entry-icon" src="public/work-moguding.png" alt="蘑菇丁项目缩略图"><div><strong>蘑菇丁 APP 改版升级</strong><span>UI 设计实习 · 2025.07—2025.11</span></div><figure class="about-entry-preview"><img src="public/project-moguding.png" alt="蘑菇丁 APP 改版项目预览"><figcaption>把复杂信息整理成更清晰、更容易行动的界面。</figcaption></figure></a>
+      <a class="about-entry about-entry-project-link" href="/out/projects/kugou/" style="--row-accent:#65d6f5" aria-label="查看酷狗寻音季视觉设计项目"><img class="about-entry-icon" src="public/project-kugou-season.png" alt="酷狗寻音季项目缩略图"><div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2025.03—2025.06</span></div><figure class="about-entry-preview"><img src="public/project-kugou-season.png" alt="酷狗寻音季活动视觉项目预览"><figcaption>以清透天空色、音乐道具与品牌 IP，构建轻快的狂欢季活动视觉。</figcaption></figure></a>
+      <a class="about-entry about-entry-project-link" href="/out/projects/miaoxiaotian/" style="--row-accent:#b7d95a" aria-label="查看喵小甜 IP 全链路设计项目"><img class="about-entry-icon" src="public/work-ip.png" alt="喵小甜 IP 项目缩略图"><div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.10—2025.02</span></div><figure class="about-entry-preview"><img src="public/project-ip-scenes.png" alt="喵小甜 IP 全链路设计预览"><figcaption>持续尝试让新技术拥有更亲和、更有温度的表达。</figcaption></figure></a>
+    </div></div></div>
+    <div class="about-cursors about-cursors-shared" aria-hidden="true"><span class="cursor-you"><i></i>You</span><span class="cursor-shiqi"><i></i>Shiqi</span></div>
   </section>
 
   <section class="experience section-pad" id="experience"><div class="section-label"><span>02</span> EXPERIENCE / 实习经历</div><div class="experience-head"><h2 class="text-type section-type section-type-display" data-text-type="在真实业务中，|让设计产生结果。" aria-label="在真实业务中，让设计产生结果。"><span class="text-type__content" aria-hidden="true">在真实业务中，<br>让设计产生结果。</span><span class="text-type__cursor" aria-hidden="true"></span></h2><p>从用户问题、产品链路到视觉规范，我参与完整设计过程，也持续用数据验证方案是否真正有效。</p></div><div class="scroll-stack-scroller experience-list"><div class="scroll-stack-inner">
-    <div class="scroll-stack-card"><article class="experience-card" style="--experience-accent:#21ffc0"><header><div><small>01 / 互联网 · 电子商务</small><h3>上海掌淘网络科技有限公司</h3><p>UI 设计实习生 · 设计部</p></div><div class="experience-meta"><span>2025.04—2025.09</span><span>上海</span></div></header><div class="experience-body"><p class="experience-summary">围绕简历完善与投递意愿重构关键流程，并建立可复用的产品视觉规范。</p><aside class="experience-results"><p>WORK RESULTS / 工作成果</p><div class="metric-grid metric-grid-three"><div class="metric"><strong aria-label="76%"><span class="count-up-text" data-count-up data-count-to="76">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>简历完整填写率 · 原 42%</span></div><div class="metric"><strong aria-label="8%"><span class="count-up-text" data-count-up data-count-to="8" data-count-delay="80">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>单页放弃率 · 原 25%</span></div><div class="metric"><strong aria-label="37.56%"><span class="count-up-text" data-count-up data-count-to="37.56" data-count-decimals="2" data-count-delay="160">0.00</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>简历投递率 · +16.18pp</span></div></div></aside></div></article></div>
-    <div class="scroll-stack-card"><article class="experience-card experience-card-alt" style="--experience-accent:#b9d8ff"><header><div><small>02 / 通信 · 数字体验</small><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div><div class="experience-meta"><span>2026.01—2026.04</span><span>浙江</span></div></header><div class="experience-body"><p class="experience-summary">负责炫彩通话小程序全链路体验，推动探索、创作与分享闭环落地。</p><aside class="experience-results"><p>WORK RESULTS / 工作成果</p><div class="metric-grid metric-grid-two"><div class="metric"><strong aria-label="提升 35%"><span class="count-up-text" data-count-up data-count-to="35">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>用户七日留存率</span></div><div class="metric"><strong aria-label="完成率 76%"><span class="count-up-text" data-count-up data-count-to="76" data-count-delay="100">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>创作完成率 · 高于预期 16%</span></div></div></aside></div></article></div>
-    <div class="scroll-stack-card"><article class="experience-card experience-card-kugou" style="--experience-accent:#84ddf7"><header><div><small>03 / 音乐 · 活动视觉</small><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div><div class="experience-meta"><span>2024.10—2025.02</span><span>广州</span></div></header><div class="experience-body"><p class="experience-summary">完成“寻音季”主视觉与运营物料延展，建立年轻、轻盈的活动视觉语言。</p><aside class="experience-results"><p>WORK RESULTS / 工作成果</p><div class="metric-grid metric-grid-two"><div class="metric"><strong aria-label="提升 20%"><span class="count-up-text" data-count-up data-count-to="20">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>活动参与人数</span></div><div class="metric"><strong aria-label="提升 35%"><span class="count-up-text" data-count-up data-count-to="35" data-count-delay="100">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>用户 7 日留存率</span></div></div></aside></div></article></div>
+    <div class="scroll-stack-card"><article class="experience-card experience-card-kugou" style="--experience-accent:#84ddf7"><header><div><small>01 / 音乐 · 活动视觉</small><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div><div class="experience-meta"><span>2025.03—2025.06</span><span>广州</span></div></header><div class="experience-body"><p class="experience-summary">完成“寻音季”主视觉与运营物料延展，建立年轻、轻盈的活动视觉语言。</p><aside class="experience-results"><p>WORK RESULTS / 工作成果</p><div class="metric-grid metric-grid-two"><div class="metric"><strong aria-label="提升 20%"><span class="count-up-text" data-count-up data-count-to="20">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>活动参与人数</span></div><div class="metric"><strong aria-label="提升 35%"><span class="count-up-text" data-count-up data-count-to="35" data-count-delay="100">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>用户 7 日留存率</span></div></div></aside></div></article></div>
+    <div class="scroll-stack-card"><article class="experience-card" style="--experience-accent:#21ffc0"><header><div><small>02 / 互联网 · 电子商务</small><h3>上海掌淘网络科技有限公司</h3><p>UI 设计实习生 · 设计部</p></div><div class="experience-meta"><span>2025.07—2025.11</span><span>上海</span></div></header><div class="experience-body"><p class="experience-summary">围绕简历完善与投递意愿重构关键流程，并建立可复用的产品视觉规范。</p><aside class="experience-results"><p>WORK RESULTS / 工作成果</p><div class="metric-grid metric-grid-three"><div class="metric"><strong aria-label="76%"><span class="count-up-text" data-count-up data-count-to="76">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>简历完整填写率 · 原 42%</span></div><div class="metric"><strong aria-label="8%"><span class="count-up-text" data-count-up data-count-to="8" data-count-delay="80">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>单页放弃率 · 原 25%</span></div><div class="metric"><strong aria-label="37.56%"><span class="count-up-text" data-count-up data-count-to="37.56" data-count-decimals="2" data-count-delay="160">0.00</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>简历投递率 · +16.18pp</span></div></div></aside></div></article></div>
+    <div class="scroll-stack-card"><article class="experience-card experience-card-alt" style="--experience-accent:#b9d8ff"><header><div><small>03 / 通信 · 数字体验</small><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div><div class="experience-meta"><span>2026.02—2026.05</span><span>浙江</span></div></header><div class="experience-body"><p class="experience-summary">负责炫彩通话小程序全链路体验，推动探索、创作与分享闭环落地。</p><aside class="experience-results"><p>WORK RESULTS / 工作成果</p><div class="metric-grid metric-grid-two"><div class="metric"><strong aria-label="提升 35%"><span class="count-up-text" data-count-up data-count-to="35">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>用户七日留存率</span></div><div class="metric"><strong aria-label="完成率 76%"><span class="count-up-text" data-count-up data-count-to="76" data-count-delay="100">0</span><span class="metric-unit" aria-hidden="true">%</span></strong><span>创作完成率 · 高于预期 16%</span></div></div></aside></div></article></div>
     <div class="scroll-stack-end" aria-hidden="true"></div>
   </div></div></section>
 
   <section class="capabilities section-pad" id="capabilities"><div class="section-label"><span>03</span> CAPABILITIES / 专业能力</div><div class="capabilities-head"><h2 class="text-type section-type section-type-display" data-text-type="从问题出发，|把方案推向完成。" aria-label="从问题出发，把方案推向完成。"><span class="text-type__content" aria-hidden="true">从问题出发，<br>把方案推向完成。</span><span class="text-type__cursor" aria-hidden="true"></span></h2><p>研究、原型与视觉不是三段孤立流程，而是一组持续校准方向的方法。</p></div><div class="capability-cards"><article class="capability-card capability-card-research"><header><small>01</small><em>RESEARCH</em></header><div class="capability-copy"><h3>用户访谈</h3><ul class="capability-tags"><li>用户调研</li><li>竞品分析</li><li>体验地图</li></ul></div></article><article class="capability-card capability-card-flow"><header><small>02</small><em>FLOW</em></header><div class="capability-copy"><h3>复杂流程梳理</h3><ul class="capability-tags"><li>信息架构</li><li>流程设计</li><li>任务路径</li></ul></div></article><article class="capability-card capability-card-prototype"><header><small>03</small><em>PROTOTYPE</em></header><img class="capability-visual" src="public/capability-prototype.png" alt="高保真界面展示"><div class="capability-copy"><h3>高保真原型</h3><ul class="capability-tags"><li>Figma 原型</li><li>交互状态</li><li>可用性验证</li></ul></div></article><article class="capability-card capability-card-system"><header><small>04</small><em>SYSTEM</em></header><div class="capability-system-board" aria-hidden="true"><div class="system-sample system-sample-type"><span>TYPE</span><strong>苹方</strong><small>PingFang SC</small></div><div class="system-sample system-sample-color"><span>COLOR</span><div><i></i><i></i><i></i><i></i><i></i></div></div><div class="system-sample system-sample-component"><span>COMPONENT</span><img src="public/system-component-card.png" alt=""></div></div><div class="capability-copy"><h3>组件与视觉规范</h3><ul class="capability-tags"><li>UI 规范</li><li>组件系统</li><li>视觉规则</li></ul></div></article><article class="capability-card capability-card-delivery"><header><small>05</small><em>DELIVERY</em></header><div class="capability-copy"><h3>设计交付协作</h3><ul class="capability-tags"><li>设计标注</li><li>开发协作</li><li>还原验收</li></ul></div></article><article class="capability-card capability-card-motion"><header><small>06</small><em>MOTION + AI</em></header><div class="capability-copy"><h3>动效与 AI 协作</h3><ul class="capability-tags"><li>After Effects</li><li>AIGC</li><li>Codex</li></ul></div></article></div></section>
 
-  <footer class="contact" id="contact"><div class="section-label"><span>04</span> CONTACT / 联系</div><div class="contact-main"><div class="falling-text-container contact-falling" role="button" tabindex="0" aria-label="点击让结尾文字落下并播放音效"><div class="falling-text-target"><div class="falling-line contact-falling-kicker"><span class="falling-word">Curious,</span><span class="falling-word">observant,</span><span class="falling-word">always</span><span class="falling-word">designing.</span></div><div class="falling-line contact-falling-headline"><span class="falling-word">Thanks</span><span class="falling-word">for</span><span class="falling-word">reading.</span></div><div class="falling-line contact-falling-headline"><span class="falling-word">Let’s</span><span class="falling-word">connect</span><span class="falling-word">and</span><span class="falling-word">create.</span></div></div><div class="falling-text-canvas" aria-hidden="true"></div></div><span class="contact-click-doodle" aria-hidden="true"><img src="public/click-hand-v2.png" alt=""></span><audio id="contactClickAudio" src="public/audio/contact-click-sound.mp3" preload="metadata"></audio></div><a class="email" href="mailto:3619554001@qq.com" aria-label="发送邮件到 3619554001@qq.com"><span class="email-sticker" aria-hidden="true"><i></i><b>mail</b></span><span class="email-copy"><small>EMAIL / 写邮件</small><strong>3619554001@qq.com</strong></span><span class="email-arrow" aria-hidden="true">↗</span></a><div class="contact-meta"><div><small>PHONE / WECHAT</small><a href="tel:19956642163">199 5664 2163</a></div><div><small>LOCATION</small><p>两周内到岗</p></div><div><small>STATUS</small><p>寻找实习机会</p></div><a href="#top">回到顶部 ↑</a></div><div class="footer-signature">Shiqi Wang</div></footer>
+  <footer class="contact" id="contact"><div class="section-label"><span>04</span> CONTACT / 联系</div><div class="contact-main"><div class="falling-text-container contact-falling" role="button" tabindex="0" aria-label="点击让结尾文字落下并播放音效"><div class="falling-text-target"><div class="falling-line contact-falling-kicker"><span class="falling-word">Curious,</span><span class="falling-word">observant,</span><span class="falling-word">always</span><span class="falling-word">designing.</span></div><div class="falling-line contact-falling-headline"><span class="falling-word">Thanks</span><span class="falling-word">for</span><span class="falling-word">reading.</span></div><div class="falling-line contact-falling-headline"><span class="falling-word">Let’s</span><span class="falling-word">connect</span><span class="falling-word">and</span><span class="falling-word">create.</span></div></div><div class="falling-text-canvas" aria-hidden="true"></div></div><span class="contact-click-doodle" aria-hidden="true"><img src="public/click-hand-v2.png" alt=""></span><audio id="contactClickAudio" src="public/audio/contact-click-sound.mp3" preload="metadata"></audio></div><div class="contact-actions"><a class="email" href="mailto:3619554001@qq.com" aria-label="发送邮件到 3619554001@qq.com"><span class="email-sticker" aria-hidden="true"><i></i><b>mail</b></span><span class="email-copy"><small>EMAIL / 写邮件</small><strong>3619554001@qq.com</strong></span><span class="email-arrow" aria-hidden="true">↗</span></a><a class="contact-resume" href="public/resume.pdf?v=20260831" target="_blank" rel="noreferrer"><span>查看简历</span><i aria-hidden="true">↗</i></a></div><div class="contact-meta"><div><small>PHONE / WECHAT</small><a href="tel:19956642163">199 5664 2163</a></div><div><small>LOCATION</small><p>两周内到岗</p></div><div><small>STATUS</small><p>寻找实习机会</p></div><a href="#top">回到顶部 ↑</a></div><div class="footer-signature">Shiqi Wang</div></footer>
   <div class="notice" id="notice"></div>
 </main>
 <script>
   const hero = document.querySelector('.hero'); const notice = document.querySelector('#notice');
+  const sceneButtons=[...document.querySelectorAll('[data-scene-target]')];
+  const setHeroScene=scene=>{hero.classList.remove('hero-scene-desk','hero-scene-tidy','hero-scene-notebook','tidy-scene-active','is-tidy');hero.classList.add(`hero-scene-${scene}`);hero.dataset.scene=scene;sceneButtons.forEach(button=>{const active=button.dataset.sceneTarget===scene;button.setAttribute('aria-pressed',String(active));button.classList.toggle('is-active',active)});};
+  sceneButtons.forEach(button=>button.addEventListener('click',()=>setHeroScene(button.dataset.sceneTarget)));
+  setHeroScene('desk');
   hero.addEventListener('pointermove', e => { const r=hero.getBoundingClientRect(); hero.style.setProperty('--pointer-x',(e.clientX-r.left)/r.width-.5); hero.style.setProperty('--pointer-y',(e.clientY-r.top)/r.height-.5); });
-  const aboutShowcase=document.querySelector('.about-showcase');
-  if(aboutShowcase&&!matchMedia('(hover: none)').matches){const you=aboutShowcase.querySelector('.cursor-you'),shiqi=aboutShowcase.querySelector('.cursor-shiqi'),entries=[...aboutShowcase.querySelectorAll('.about-entry')];if(you&&shiqi){you.style.left=shiqi.style.left='0px';you.style.right=shiqi.style.right='auto';you.style.top=shiqi.style.top='0px';let box={width:aboutShowcase.clientWidth,height:aboutShowcase.clientHeight},yt={x:box.width*.78,y:85},yc={...yt},st={x:box.width*.63,y:235},sc={...st},active=false;const home=()=>{box={width:aboutShowcase.clientWidth,height:aboutShowcase.clientHeight};st={x:box.width*.63,y:235};active=false},safe=()=>{box={width:aboutShowcase.clientWidth,height:aboutShowcase.clientHeight};st={x:box.width-95,y:box.height-62};active=true},reset=()=>setTimeout(()=>{if(!aboutShowcase.querySelector('.about-entry:hover')&&!aboutShowcase.contains(document.activeElement))home()},0),setYou=e=>{if(e.pointerType==='touch')return;const r=aboutShowcase.getBoundingClientRect();yt={x:Math.max(0,Math.min(r.width,e.clientX-r.left)),y:Math.max(0,Math.min(r.height,e.clientY-r.top))}},hideYou=e=>{if(e.pointerType==='touch')return;const r=aboutShowcase.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,exits=[{d:Math.abs(x),t:{x:-86,y:Math.max(0,Math.min(r.height,y))}},{d:Math.abs(r.width-x),t:{x:r.width+86,y:Math.max(0,Math.min(r.height,y))}},{d:Math.abs(y),t:{x:Math.max(0,Math.min(r.width,x)),y:-48}},{d:Math.abs(r.height-y),t:{x:Math.max(0,Math.min(r.width,x)),y:r.height+48}}];exits.sort((a,b)=>a.d-b.d);yt=exits[0].t};aboutShowcase.addEventListener('pointermove',setYou);aboutShowcase.addEventListener('pointerleave',hideYou);entries.forEach(entry=>{entry.addEventListener('pointerenter',safe);entry.addEventListener('pointerleave',reset);entry.addEventListener('focus',safe);entry.addEventListener('blur',reset)});addEventListener('resize',()=>{box={width:aboutShowcase.clientWidth,height:aboutShowcase.clientHeight};if(!active)st={x:box.width*.63,y:235}});const tick=t=>{yc.x+=(yt.x-yc.x)*.16;yc.y+=(yt.y-yc.y)*.16;sc.x+=(st.x-sc.x)*.055;sc.y+=(st.y-sc.y)*.055;you.style.transform=`translate3d(${yc.x-59}px,${yc.y-27}px,0)`;const fx=Math.sin(t/1150)*9,fy=Math.cos(t/1450)*7,rot=Math.sin(t/1700)*1.2;shiqi.style.transform=`translate3d(${sc.x-59+fx}px,${sc.y-27+fy}px,0) rotate(${rot}deg)`;requestAnimationFrame(tick)};requestAnimationFrame(tick)}}
+  (()=>{
+    if(matchMedia('(hover: none)').matches)return;
+    const section=document.querySelector('#about'),layer=section?.querySelector('.about-cursors-shared');
+    const you=layer?.querySelector('.cursor-you'),shiqi=layer?.querySelector('.cursor-shiqi');
+    const zones=[section?.querySelector('#about-life'),section?.querySelector('.about-showcase')].filter(Boolean);
+    if(!section||!layer||!you||!shiqi||!zones.length)return;
+    you.style.left=shiqi.style.left='0px';you.style.right=shiqi.style.right='auto';you.style.top=shiqi.style.top='0px';
+    let activeZone=null,previewActive=false,yt={x:0,y:0},yc={x:0,y:0},st={x:0,y:0},sc={x:0,y:0};
+    const geometry=zone=>{const sr=section.getBoundingClientRect(),r=zone.getBoundingClientRect();return{r,x:r.left-sr.left,y:r.top-sr.top}},home=zone=>{const{r,x,y}=geometry(zone);return{x:x+r.width*.63,y:y+Math.min(235,r.height-62)}};
+    const activate=(zone,event)=>{const hidden=!activeZone;activeZone=zone;previewActive=false;const{r,x,y}=geometry(zone);yt=event?{x:x+Math.max(0,Math.min(r.width,event.clientX-r.left)),y:y+Math.max(0,Math.min(r.height,event.clientY-r.top))}:{x:x+r.width*.78,y:y+85};st=home(zone);if(hidden){yc={...yt};sc={...st}}layer.classList.add('is-active')};
+    const move=(zone,event)=>{if(event.pointerType==='touch')return;if(activeZone!==zone)activate(zone,event);const{r,x,y}=geometry(zone);yt={x:x+Math.max(0,Math.min(r.width,event.clientX-r.left)),y:y+Math.max(0,Math.min(r.height,event.clientY-r.top))}};
+    const leave=(zone,event)=>{if(activeZone!==zone||event.pointerType==='touch')return;if(event.relatedTarget instanceof Node&&zones.some(item=>item.contains(event.relatedTarget)))return;const{r,x:ox,y:oy}=geometry(zone),x=event.clientX-r.left,y=event.clientY-r.top,exits=[{d:Math.abs(x),t:{x:ox-86,y:oy+Math.max(0,Math.min(r.height,y))}},{d:Math.abs(r.width-x),t:{x:ox+r.width+86,y:oy+Math.max(0,Math.min(r.height,y))}},{d:Math.abs(y),t:{x:ox+Math.max(0,Math.min(r.width,x)),y:oy-48}},{d:Math.abs(r.height-y),t:{x:ox+Math.max(0,Math.min(r.width,x)),y:oy+r.height+48}}];exits.sort((a,b)=>a.d-b.d);yt=exits[0].t;activeZone=null;previewActive=false;layer.classList.remove('is-active')};
+    zones.forEach(zone=>{zone.addEventListener('pointerenter',event=>activate(zone,event));zone.addEventListener('pointermove',event=>move(zone,event));zone.addEventListener('pointerleave',event=>leave(zone,event));zone.querySelectorAll('.about-entry').forEach(entry=>{const safe=()=>{activate(zone);const{r,x,y}=geometry(zone);st={x:x+r.width-95,y:y+r.height-62};previewActive=true},reset=()=>setTimeout(()=>{if(activeZone===zone&&!zone.querySelector('.about-entry:hover')&&!zone.contains(document.activeElement)){st=home(zone);previewActive=false}},0);entry.addEventListener('pointerenter',safe);entry.addEventListener('pointerleave',reset);entry.addEventListener('focus',safe);entry.addEventListener('blur',reset)})});
+    addEventListener('resize',()=>{if(activeZone&&!previewActive)st=home(activeZone)});
+    const tick=t=>{yc.x+=(yt.x-yc.x)*.16;yc.y+=(yt.y-yc.y)*.16;sc.x+=(st.x-sc.x)*.055;sc.y+=(st.y-sc.y)*.055;you.style.transform=`translate3d(${yc.x-59}px,${yc.y-27}px,0)`;const fx=Math.sin(t/1150)*9,fy=Math.cos(t/1450)*7,rot=Math.sin(t/1700)*1.2;shiqi.style.transform=`translate3d(${sc.x-59+fx}px,${sc.y-27+fy}px,0) rotate(${rot}deg)`;requestAnimationFrame(tick)};requestAnimationFrame(tick)
+  })();
   document.querySelectorAll('[data-notice]').forEach(el=>el.addEventListener('click',()=>{ notice.textContent=el.dataset.notice; notice.classList.add('show'); clearTimeout(window.noticeTimer); window.noticeTimer=setTimeout(()=>notice.classList.remove('show'),2200); }));
   (()=>{const card=document.querySelector('.desk-record'),audio=document.querySelector('#deskRecordAudio');if(!card||!audio)return;const line=card.querySelector('.desk-record-line'),time=card.querySelector('[data-audio-time]'),finePointer=matchMedia('(hover:hover) and (pointer:fine)').matches,targetVolume=.24;let hoverTimer=0,fadeFrame=0,playing=false;const format=value=>{const seconds=Math.max(0,Math.floor(Number.isFinite(value)?value:0));return`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`};const update=()=>{const duration=Number.isFinite(audio.duration)?audio.duration:10,progress=duration?Math.min(1,audio.currentTime/duration):0;line?.style.setProperty('--audio-progress',`${(progress*100).toFixed(2)}%`);if(time)time.textContent=`${format(audio.currentTime)} / ${format(duration)}`};const setPlaying=value=>{playing=value;card.classList.toggle('is-playing',value);card.setAttribute('aria-pressed',String(value));card.setAttribute('aria-label',value?'停止播放《灵感与专注》':'播放音乐《灵感与专注》')};const fadeTo=(target,duration)=>{cancelAnimationFrame(fadeFrame);const start=audio.volume,started=performance.now(),step=now=>{const progress=Math.min(1,(now-started)/duration),eased=progress<.5?2*progress*progress:1-Math.pow(-2*progress+2,2)/2;audio.volume=Math.max(0,Math.min(1,start+(target-start)*eased));if(progress<1)fadeFrame=requestAnimationFrame(step);else fadeFrame=0};fadeFrame=requestAnimationFrame(step)};const finish=()=>{cancelAnimationFrame(fadeFrame);fadeFrame=0;audio.pause();audio.currentTime=0;audio.volume=0;update();setPlaying(false)};const play=async()=>{clearTimeout(hoverTimer);if(playing)return;audio.currentTime=0;cancelAnimationFrame(fadeFrame);audio.volume=0;try{await audio.play();setPlaying(true);fadeTo(targetVolume,420)}catch(error){finish()}};const toggle=()=>{clearTimeout(hoverTimer);if(playing)finish();else play()};audio.loop=false;audio.volume=0;audio.addEventListener('loadedmetadata',update);audio.addEventListener('timeupdate',update);audio.addEventListener('ended',finish);if(finePointer)card.addEventListener('pointerenter',()=>{hoverTimer=setTimeout(play,300)});card.addEventListener('click',toggle);update()})();
   document.querySelectorAll('[data-folder]').forEach(folder=>{const papers=[...folder.querySelectorAll('.rb-paper')],toggle=()=>{const isOpen=folder.classList.toggle('open');folder.setAttribute('aria-expanded',String(isOpen));folder.setAttribute('aria-label',isOpen?'收起灵感文件夹':'打开灵感文件夹');if(!isOpen)papers.forEach(paper=>{paper.style.setProperty('--magnet-x','0px');paper.style.setProperty('--magnet-y','0px')})};folder.addEventListener('click',toggle);folder.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle()}});papers.forEach(paper=>{paper.addEventListener('pointermove',event=>{if(!folder.classList.contains('open'))return;const r=paper.getBoundingClientRect();paper.style.setProperty('--magnet-x',`${(event.clientX-r.left-r.width/2)*.13}px`);paper.style.setProperty('--magnet-y',`${(event.clientY-r.top-r.height/2)*.13}px`)});paper.addEventListener('pointerleave',()=>{paper.style.setProperty('--magnet-x','0px');paper.style.setProperty('--magnet-y','0px')})})});
@@ -294,5 +934,15 @@
     }, { threshold: 0.55 });
     cards.forEach(card => observer.observe(card));
   })();
+</script>
+<script type="module">
+  import { attachNotebookTrail } from './public/notebook-trail.js?v=20260902-notebook-cursor';
+  const trailRoot = document.querySelector('section#top');
+  const trailLayer = document.createElement('div');
+  trailLayer.className = 'notebook-trail';
+  trailLayer.setAttribute('aria-hidden', 'true');
+  trailRoot.append(trailLayer);
+  const disposeTrail = attachNotebookTrail(trailRoot, trailLayer);
+  addEventListener('pagehide', event => { if (!event.persisted) disposeTrail(); });
 </script>
 </body></html>

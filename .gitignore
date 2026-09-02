@@ -11,7 +11,7 @@ site/tsconfig.tsbuildinfo
 /dist/
 /tmp/
 /color-call-prototype/
-/el.textContent)})
+/el.textContent)[}])
 site/layout-*.png
 site/hero-*.png
 site/public/projects/moguding/moguding-portfolio.pdf
@@ -22,6 +22,8 @@ site/public/click-hand-line-source.png
 site/public/click-hand-source-v2.png
 site/public/kugou-assets/
 site/scripts/
+site/pages-export/
+site/tidy-v8-small.png
 *.log
 .DS_Store
 Thumbs.db

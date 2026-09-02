@@ -1,0 +1,38 @@
+.notebook-trail {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 18;
+  overflow: hidden;
+  contain: layout paint;
+  pointer-events: none;
+  user-select: none;
+}
+
+#top.hero-scene-notebook > .notebook-trail { display: block; }
+
+/* Native cursor: works over controls without a second following DOM image.
+   Scene-scoped so the first two states keep all their existing cursors. */
+@media (hover: hover) and (pointer: fine) {
+  #top.hero-scene-notebook[data-notebook-cursor="ready"],
+  #top.hero-scene-notebook[data-notebook-cursor="ready"] * {
+    cursor: var(--notebook-pointer, auto) !important;
+  }
+}
+
+.notebook-trail > .notebook-trail-item {
+  position: absolute;
+  display: block;
+  max-width: none;
+  margin: 0;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 7px 9px rgba(50, 40, 32, .1));
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  #top.hero-scene-notebook > .notebook-trail { display: none; }
+}

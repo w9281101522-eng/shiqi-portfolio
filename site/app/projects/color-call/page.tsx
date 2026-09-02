@@ -9,7 +9,8 @@ export const metadata = {
 
 const panels = Array.from({ length: 10 }, (_, index) => {
   const number = String(index + 1).padStart(2, "0");
-  return withBasePath(`/projects/color-call/sections/section-${number}.webp`);
+  const cacheVersion = index >= 8 ? "?v=20260831-seam-fix" : "";
+  return withBasePath(`/projects/color-call/sections/section-${number}.webp${cacheVersion}`);
 });
 
 const panelDescriptions = [
@@ -24,6 +25,8 @@ const panelDescriptions = [
   "视频二次创作与内容传播体验",
   "评论互动、消息触达与项目总结",
 ];
+
+const panelHeights = [2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 1750, 1896];
 
 function PanelRange({
   start,
@@ -46,7 +49,7 @@ function PanelRange({
             src={src}
             alt={panelDescriptions[panelIndex - 1]}
             width={1920}
-            height={panelIndex === panels.length ? 1598 : 2048}
+            height={panelHeights[panelIndex - 1]}
             loading={panelIndex <= 2 ? "eager" : "lazy"}
             decoding="async"
             fetchPriority={panelIndex === 1 ? "high" : "auto"}
@@ -64,11 +67,10 @@ export default function ColorCallProjectPage() {
       <ProjectTopNav
         current="color-call"
         links={[
-          { href: "#background", label: "背景" },
-          { href: "#flow", label: "流程" },
-          { href: "#browse", label: "浏览" },
-          { href: "#interaction", label: "互动" },
-          { href: "#share", label: "分享" },
+          { href: "#top", label: "背景" },
+          { href: "#background", label: "引导" },
+          { href: "#browse", label: "创作" },
+          { href: "#share", label: "社交" },
         ]}
       />
 

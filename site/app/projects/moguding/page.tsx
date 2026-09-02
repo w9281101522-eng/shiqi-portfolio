@@ -45,6 +45,13 @@ const panelDescriptions = [
   "蘑菇丁项目总结与页面总览",
 ];
 
+const panelAnchors: Record<number, string> = {
+  2: "background",
+  3: "visual",
+  7: "matching",
+  25: "resume",
+};
+
 function PanelRange({
   start,
   end,
@@ -65,6 +72,7 @@ function PanelRange({
         return (
           <img
             key={src}
+            id={panelAnchors[panelIndex]}
             src={src}
             alt={panelDescriptions[panelIndex - 1]}
             width={1924}
@@ -89,18 +97,17 @@ export default function MogudingProjectPage() {
           { href: "#background", label: "背景" },
           { href: "#visual", label: "视觉" },
           { href: "#matching", label: "职位匹配" },
-          { href: "#enterprise", label: "企业体验" },
-          { href: "#resume", label: "简历优化" },
+          { href: "#resume", label: "简历流程" },
         ]}
       />
 
       <div className="mgd-artboard">
         <PanelRange start={1} end={1} label="项目封面" />
-        <PanelRange start={2} end={3} id="background" label="项目背景与问题分析" />
-        <PanelRange start={4} end={6} id="visual" label="视觉方向与设计规范" />
-        <PanelRange start={7} end={14} id="matching" label="职位匹配体验优化" />
+        <PanelRange start={2} end={3} label="项目背景与问题分析" />
+        <PanelRange start={4} end={6} label="视觉方向与设计规范" />
+        <PanelRange start={7} end={14} label="职位匹配体验优化" />
         <PanelRange start={15} end={22} id="enterprise" label="企业信息体验优化" />
-        <PanelRange start={23} end={29} id="resume" label="简历填写体验优化与项目总结" />
+        <PanelRange start={23} end={29} label="简历填写体验优化与项目总结" />
       </div>
 
       <ProjectPager current="moguding" />

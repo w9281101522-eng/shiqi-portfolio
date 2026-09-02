@@ -36,6 +36,10 @@
   --project-accent: #ff9fb2;
 }
 
+.project-top-nav[data-project="beyond-design"] {
+  --project-accent: #f45cb3;
+}
+
 .project-top-nav a {
   color: inherit;
   text-decoration: none;

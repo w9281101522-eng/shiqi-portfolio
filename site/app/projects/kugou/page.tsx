@@ -7,7 +7,7 @@ export const metadata = {
   description: "酷狗音乐寻音季运营活动视觉与交互体验设计。",
 };
 
-const panels = Array.from({ length: 16 }, (_, index) => {
+const panels = Array.from({ length: 21 }, (_, index) => {
   const number = String(index + 1).padStart(2, "0");
   return withBasePath(`/projects/kugou/sections/section-${number}.webp`);
 });
@@ -29,7 +29,20 @@ const panelDescriptions = [
   "图鉴界面与玩法机制",
   "项目总结与工作成果",
   "酷狗寻音记项目视觉总览",
+  "品牌基因强化、IP 形象与 AIGC 设计",
+  "AIGC 资产搭建与应用策略",
+  "模型训练流程与良品率测试",
+  "ComfyUI 生图工作流与 AI 资产展示",
+  "AI 角色资产展示与项目结尾",
 ];
+
+const panelAnchors: Record<number, string> = {
+  1: "background",
+  3: "strategy",
+  7: "experience",
+  12: "retention",
+  15: "summary",
+};
 
 function PanelRange({
   start,
@@ -49,10 +62,11 @@ function PanelRange({
         return (
           <img
             key={src}
+            id={panelAnchors[panelIndex]}
             src={src}
             alt={panelDescriptions[panelIndex - 1]}
             width={1567}
-            height={panelIndex === 16 ? 2048 : 2048}
+            height={panelIndex === 21 ? 278 : 2048}
             loading={panelIndex <= 2 ? "eager" : "lazy"}
             decoding="async"
             draggable={false}
@@ -79,11 +93,11 @@ export default function KugouProjectPage() {
 
       <div className="kg-artboard">
         <PanelRange start={1} end={1} label="项目封面与设计背景" />
-        <PanelRange start={2} end={3} id="background" label="设计背景、目标与策略" />
-        <PanelRange start={4} end={5} id="strategy" label="创意视觉与颜色质感" />
-        <PanelRange start={6} end={10} id="experience" label="主会场、游戏链路与弹窗体验" />
-        <PanelRange start={11} end={14} id="retention" label="触达入口、用户留存、换装与图鉴" />
-        <PanelRange start={15} end={16} id="summary" label="项目总结与视觉总览" />
+        <PanelRange start={2} end={3} label="设计背景、目标与策略" />
+        <PanelRange start={4} end={5} label="创意视觉与颜色质感" />
+        <PanelRange start={6} end={10} label="主会场、游戏链路与弹窗体验" />
+        <PanelRange start={11} end={14} label="触达入口、用户留存、换装与图鉴" />
+        <PanelRange start={15} end={21} label="项目总结与视觉总览" />
       </div>
 
       <ProjectPager current="kugou" />

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./notebook-scene.css";
+import "./notebook-trail.css";
 
 export const metadata: Metadata = {
   title: "王诗琦｜UX / UI 设计师作品集",

@@ -9,7 +9,7 @@ export const metadata = {
 
 const panels = Array.from({ length: 10 }, (_, index) => {
   const number = String(index + 1).padStart(2, "0");
-  const cacheVersion = index >= 8 ? "?v=20260831-seam-fix" : "";
+  const cacheVersion = "?v=20261111-color-call";
   return withBasePath(`/projects/color-call/sections/section-${number}.webp${cacheVersion}`);
 });
 

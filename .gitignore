@@ -23,6 +23,7 @@ site/public/click-hand-source-v2.png
 site/public/kugou-assets/
 site/scripts/
 site/pages-export/
+site/cloudflare-export/
 site/tidy-v8-small.png
 *.log
 .DS_Store

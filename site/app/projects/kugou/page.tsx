@@ -9,7 +9,7 @@ export const metadata = {
 
 const panels = Array.from({ length: 21 }, (_, index) => {
   const number = String(index + 1).padStart(2, "0");
-  return withBasePath(`/projects/kugou/sections/section-${number}.webp`);
+  return withBasePath(`/projects/kugou/sections/section-${number}.webp?v=20261111-kugou`);
 });
 
 const panelDescriptions = [
@@ -66,7 +66,7 @@ function PanelRange({
             src={src}
             alt={panelDescriptions[panelIndex - 1]}
             width={1567}
-            height={panelIndex === 21 ? 278 : 2048}
+            height={panelIndex === 21 ? 286 : 2048}
             loading={panelIndex <= 2 ? "eager" : "lazy"}
             decoding="async"
             draggable={false}

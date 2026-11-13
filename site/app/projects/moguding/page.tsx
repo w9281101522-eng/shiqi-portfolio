@@ -10,7 +10,7 @@ export const metadata = {
 
 const panels = Array.from({ length: 29 }, (_, index) => {
   const number = String(index + 1).padStart(2, "0");
-  return withBasePath(`/projects/moguding/sections-png/section-${number}.png`);
+  return withBasePath(`/projects/moguding/sections-png/section-${number}.png?v=20261111-moguding`);
 });
 
 const panelDescriptions = [

@@ -82,7 +82,7 @@ export default function MiaoXiaotianProject() {
         <div className="mx-hero-meta">
           <span>角色 / 视觉 / 场景</span>
           <span>个人项目</span>
-          <span>2024.06—08</span>
+          <span>2024.10—2024.12</span>
         </div>
         <a href="#background" className="mx-scroll">
           SCROLL TO EXPLORE <span>↓</span>

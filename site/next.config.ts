@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
   ...(isStaticExport && process.env.GITHUB_PAGES_EXPORT === "true"
     ? { distDir: "pages-export" }
     : {}),
+  ...(isStaticExport && process.env.CLOUDFLARE_PAGES_EXPORT === "true"
+    ? { distDir: "cloudflare-export" }
+    : {}),
   basePath,
   assetPrefix: basePath || undefined,
   trailingSlash: isStaticExport,

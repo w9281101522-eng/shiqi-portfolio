@@ -6,9 +6,10 @@ import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 
 const site = fileURLToPath(new URL("../", import.meta.url));
-const output = path.join(site, "pages-export");
-const base = process.env.NEXT_PUBLIC_BASE_PATH || "/shiqi-portfolio";
-assert.match(base, /^\/[a-zA-Z0-9_-]+$/);
+const isCloudflare = process.env.CLOUDFLARE_PAGES_EXPORT === "true";
+const output = path.join(site, isCloudflare ? "cloudflare-export" : "pages-export");
+const base = isCloudflare ? "" : (process.env.NEXT_PUBLIC_BASE_PATH || "/shiqi-portfolio");
+assert.match(base, /^(?:\/[a-zA-Z0-9_-]+)?$/);
 await stat(path.join(output, "projects/kugou/index.html"));
 
 function publishedHtml(html) {
@@ -27,7 +28,7 @@ await writeFile(path.join(output, "preview.html"), home);
 await writeFile(path.join(output, "beyond-design.html"), beyond);
 await mkdir(path.join(output, "beyond-design"), { recursive: true });
 await writeFile(path.join(output, "beyond-design/index.html"), beyond);
-for (const file of ["app/globals.css", "app/notebook-scene.css", "app/notebook-trail.css", "app/projects/project-navigation.css"]) {
+for (const file of ["app/globals.css", "app/hero-responsive.css", "app/notebook-scene.css", "app/notebook-trail.css", "app/projects/project-navigation.css"]) {
   await mkdir(path.dirname(path.join(output, file)), { recursive: true });
   await copyFile(path.join(site, file), path.join(output, file));
 }
@@ -51,4 +52,4 @@ const kugou = await readFile(path.join(output, "projects/kugou/index.html"), "ut
 assert.equal([...kugou.matchAll(/<img[^>]+section-\d+\.webp/g)].length, 21);
 assert.ok(home.includes("data-scene-target=\"notebook\""));
 assert.ok(home.includes(`${base}/notebook-trail.js`));
-console.log("GitHub Pages ready: approved homepage, all project pages, 21 Kugou panels, working asset paths.");
+console.log(`${isCloudflare ? "Cloudflare" : "GitHub"} Pages ready: approved homepage, all project pages, 21 Kugou panels, working asset paths.`);

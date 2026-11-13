@@ -34,7 +34,7 @@ const projects: Project[] = [
     english: "COLORFUL CALL",
     tagline: "让 AI 创作进入每一次通话",
     meta: "小程序搭建 · AIGC · 全链路体验",
-    period: "2026.02—2026.05",
+    period: "2026.05—2026.10",
     image: "/project-color-call.png",
     accent: "#25a7f0",
     overview:
@@ -51,7 +51,7 @@ const projects: Project[] = [
     english: "MOGUDING",
     tagline: "让实习求职更清晰、更高效",
     meta: "产品改版 · 求职体验 · 视觉系统",
-    period: "2025.07—2025.11",
+    period: "2025.10—2026.03",
     image: "/project-moguding.png",
     accent: "#ff6a00",
     overview:
@@ -68,7 +68,7 @@ const projects: Project[] = [
     english: "MIAO XIAOTIAN",
     tagline: "从角色语言到治愈系三维世界",
     meta: "IP 设计 · AIGC 场景 · 视觉叙事",
-    period: "2024.10—2025.02",
+    period: "2024.10—2024.12",
     image: "/project-ip-scenes.png",
     altImage: "/project-ip-hero.png",
     accent: "#b8d56a",
@@ -82,74 +82,10 @@ const projects: Project[] = [
   },
 ];
 
-const capabilities = [
-  {
-    number: "01",
-    kind: "research",
-    label: "RESEARCH",
-    title: "用户访谈",
-    text: "制定访谈提纲，整理原话与行为证据，提炼可执行的机会点。",
-    skills: ["用户调研", "竞品分析", "体验地图"],
-    image: null,
-    imageAlt: "",
-  },
-  {
-    number: "02",
-    kind: "flow",
-    label: "FLOW",
-    title: "复杂流程梳理",
-    text: "把角色、任务和异常路径画清楚，输出可讨论、可落地的完整流程。",
-    skills: ["信息架构", "流程设计", "任务路径"],
-    image: null,
-    imageAlt: "",
-  },
-  {
-    number: "03",
-    kind: "prototype",
-    label: "PROTOTYPE",
-    title: "高保真原型",
-    text: "用 Figma 搭建接近真实产品的关键交互、状态反馈与页面衔接。",
-    skills: ["Figma 原型", "交互状态", "可用性验证"],
-    image: "/capability-prototype.png",
-    imageAlt: "高保真界面展示",
-  },
-  {
-    number: "04",
-    kind: "system",
-    label: "SYSTEM",
-    title: "组件与视觉规范",
-    text: "统一字体、色彩、圆角、图标和组件状态，整理成团队可复用的规则。",
-    skills: ["UI 规范", "组件系统", "视觉规则"],
-    image: null,
-    imageAlt: "",
-  },
-  {
-    number: "05",
-    kind: "delivery",
-    label: "DELIVERY",
-    title: "设计交付协作",
-    text: "补齐页面状态、尺寸与交互说明，跟进开发还原并处理实现偏差。",
-    skills: ["设计标注", "开发协作", "还原验收"],
-    image: null,
-    imageAlt: "",
-  },
-  {
-    number: "06",
-    kind: "motion",
-    label: "MOTION + AI",
-    title: "动效与 AI 协作",
-    text: "用 After Effects、AIGC 与 Codex 辅助概念探索、动态表达和快速制作。",
-    skills: ["After Effects", "AIGC", "Codex"],
-    image: null,
-    imageAlt: "",
-  },
-];
-
 const bubbleMenuItems = [
   { label: "关于我", href: "#about", rotation: -4, hoverStyles: { bgColor: "#21ffc0", textColor: "#171717" } },
   { label: "精选项目", href: "#projects", rotation: 3, hoverStyles: { bgColor: "#b9d8ff", textColor: "#171717" } },
   { label: "实习经历", href: "#experience", rotation: -2, hoverStyles: { bgColor: "#ffb7cd", textColor: "#171717" } },
-  { label: "专业能力", href: "#capabilities", rotation: 3, hoverStyles: { bgColor: "#fff08a", textColor: "#171717" } },
   { label: "联系", href: "#contact", rotation: -4, hoverStyles: { bgColor: "#00bbff", textColor: "#ffffff" } },
 ];
 
@@ -655,22 +591,22 @@ export default function Home() {
             <div className="about-list">
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/color-call")} style={{ "--row-accent": "#25a7f0" } as CSSProperties} aria-label="查看炫彩通话小程序搭建项目">
             <img className="about-entry-icon" src={withBasePath("/work-color-call.png")} alt="炫彩通话项目缩略图" />
-                <div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.02—2026.05</span></div>
+                <div><strong>炫彩通话小程序搭建</strong><span>UX / UI 设计实习 · 2026.05—2026.10</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-color-call.png")} alt="炫彩通话小程序项目预览" /><figcaption>从需求理解到高保真交付，持续校准产品体验。</figcaption></figure>
               </a>
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/moguding")} style={{ "--row-accent": "#ff7a1a" } as CSSProperties} aria-label="查看蘑菇丁 APP 改版升级项目">
             <img className="about-entry-icon" src={withBasePath("/work-moguding.png")} alt="蘑菇丁项目缩略图" />
-                <div><strong>蘑菇丁 APP 改版升级</strong><span>UI 设计实习 · 2025.07—2025.11</span></div>
+                <div><strong>蘑菇丁 APP 改版升级</strong><span>UX 设计实习 · 2025.10—2026.03</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-moguding.png")} alt="蘑菇丁 APP 改版项目预览" /><figcaption>把复杂信息整理成更清晰、更容易行动的界面。</figcaption></figure>
               </a>
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/kugou")} style={{ "--row-accent": "#65d6f5" } as CSSProperties} aria-label="查看酷狗寻音季视觉设计项目">
             <img className="about-entry-icon" src={withBasePath("/project-kugou-season.png")} alt="酷狗寻音季项目缩略图" />
-                <div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2025.03—2025.06</span></div>
+                <div><strong>酷狗寻音季</strong><span>视觉设计实习生 · 2025.02—2025.07</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-kugou-season.png")} alt="酷狗寻音季活动视觉项目预览" /><figcaption>以清透天空色、音乐道具与品牌 IP，构建轻快的狂欢季活动视觉。</figcaption></figure>
               </a>
           <a className="about-entry about-entry-project-link" href={withBasePath("/projects/miaoxiaotian")} style={{ "--row-accent": "#b7d95a" } as CSSProperties} aria-label="查看喵小甜 IP 全链路设计项目">
             <img className="about-entry-icon" src={withBasePath("/work-ip.png")} alt="喵小甜 IP 项目缩略图" />
-                <div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.10—2025.02</span></div>
+                <div><strong>喵小甜 IP 全链路设计</strong><span>IP 视觉设计 · 2024.10—2024.12</span></div>
             <figure className="about-entry-preview"><img src={withBasePath("/project-ip-scenes.png")} alt="喵小甜 IP 全链路设计预览" /><figcaption>持续尝试让新技术拥有更亲和、更有温度的表达。</figcaption></figure>
               </a>
             </div>
@@ -685,16 +621,15 @@ export default function Home() {
       <section className="experience section-pad" id="experience">
         <div className="section-label"><span>03</span> EXPERIENCE / 实习经历</div>
         <div className="experience-head">
-          <TextType as="h2" text={"在真实业务中，\n让设计产生结果。"} className="section-type section-type-display" />
-          <p>从用户问题、产品链路到视觉规范，我参与完整设计过程，也持续用数据验证方案是否真正有效。</p>
+          <TextType as="h2" text="实习经历" className="section-type section-type-display" />
         </div>
 
         <ScrollStack className="experience-list" itemDistance={140} itemScale={0.018} itemStackDistance={18} stackPosition="17%" scaleEndPosition="8%" baseScale={0.955} rotationAmount={0}>
           <ScrollStackItem>
           <article className="experience-card experience-card-kugou" style={{ "--experience-accent": "#84ddf7" } as CSSProperties}>
             <header>
-              <div><small>01 / 音乐 · 活动视觉</small><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div>
-              <div className="experience-meta"><span>2025.03—2025.06</span><span>广州</span></div>
+              <div><h3>酷狗计算机科技</h3><p>视觉设计实习生 · 视觉运营</p></div>
+              <div className="experience-meta"><span>2025.02—2025.07</span><span>广州</span></div>
             </header>
             <div className="experience-body">
               <p className="experience-summary">完成“寻音季”主视觉与运营物料延展，建立年轻、轻盈的活动视觉语言。</p>
@@ -712,17 +647,17 @@ export default function Home() {
           <ScrollStackItem>
           <article className="experience-card" style={{ "--experience-accent": "#21ffc0" } as CSSProperties}>
             <header>
-              <div><small>02 / 互联网 · 电子商务</small><h3>上海掌淘网络科技有限公司</h3><p>UI 设计实习生 · 设计部</p></div>
-              <div className="experience-meta"><span>2025.07—2025.11</span><span>上海</span></div>
+              <div><h3>上海掌淘网络科技有限公司</h3><p>UX 设计实习生 · 设计部</p></div>
+              <div className="experience-meta"><span>2025.10—2026.03</span><span>上海</span></div>
             </header>
             <div className="experience-body">
               <p className="experience-summary">围绕简历完善与投递意愿重构关键流程，并建立可复用的产品视觉规范。</p>
               <aside className="experience-results">
                 <p>WORK RESULTS / 工作成果</p>
                 <div className="metric-grid metric-grid-three">
-                  <div className="metric"><strong aria-label="76%"><CountUp to={76} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>简历完整填写率 · 原 42%</span></div>
+                  <div className="metric"><strong aria-label="76.78%"><CountUp to={76.78} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>简历完善率 · 原 42%</span></div>
                   <div className="metric"><strong aria-label="8%"><CountUp to={8} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>单页放弃率 · 原 25%</span></div>
-                  <div className="metric"><strong aria-label="37.56%"><CountUp to={37.56} duration={1.05} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>简历投递率 · +16.18pp</span></div>
+                  <div className="metric"><strong aria-label="37.56%"><CountUp to={37.56} duration={1.05} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>简历投递率 · 原 21.38%</span></div>
                 </div>
               </aside>
             </div>
@@ -732,16 +667,16 @@ export default function Home() {
           <ScrollStackItem>
           <article className="experience-card experience-card-alt" style={{ "--experience-accent": "#b9d8ff" } as CSSProperties}>
             <header>
-              <div><small>03 / 通信 · 数字体验</small><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div>
-              <div className="experience-meta"><span>2026.02—2026.05</span><span>浙江</span></div>
+              <div><h3>重庆艾瑞数智科技有限公司</h3><p>UX 设计实习生 · 通信与传媒事业部</p></div>
+              <div className="experience-meta"><span>2026.05—2026.10</span><span>浙江</span></div>
             </header>
             <div className="experience-body">
               <p className="experience-summary">负责炫彩通话小程序全链路体验，推动探索、创作与分享闭环落地。</p>
               <aside className="experience-results">
                 <p>WORK RESULTS / 工作成果</p>
                 <div className="metric-grid metric-grid-two">
-                  <div className="metric"><strong aria-label="提升 35%"><CountUp to={35} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>用户七日留存率</span></div>
-                  <div className="metric"><strong aria-label="完成率 76%"><CountUp to={76} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>创作完成率 · 高于预期 16%</span></div>
+                  <div className="metric"><strong aria-label="达到 37%"><CountUp to={37} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>用户七日留存率</span></div>
+                  <div className="metric"><strong aria-label="完成率 77%"><CountUp to={77} className="count-up-text" /><span className="metric-unit" aria-hidden="true">%</span></strong><span>创作完成率 · 高于预期 17%</span></div>
                 </div>
               </aside>
             </div>
@@ -750,47 +685,8 @@ export default function Home() {
         </ScrollStack>
       </section>
 
-      <section className="capabilities section-pad" id="capabilities">
-        <div className="section-label"><span>04</span> CAPABILITIES / 专业能力</div>
-        <div className="capabilities-head">
-          <TextType as="h2" text={"从问题出发，\n把方案推向完成。"} className="section-type section-type-display" />
-          <p>研究、原型与视觉不是三段孤立流程，而是一组持续校准方向的方法。</p>
-        </div>
-        <div className="capability-cards">
-          {capabilities.map((item) => (
-            <article className={`capability-card capability-card-${item.kind}`} key={item.number}>
-              <header><small>{item.number}</small><em>{item.label}</em></header>
-              {item.image && <img className="capability-visual" src={withBasePath(item.image)} alt={item.imageAlt} />}
-              {item.kind === "system" && (
-                <div className="capability-system-board" aria-hidden="true">
-                  <div className="system-sample system-sample-type">
-                    <span>TYPE</span>
-                    <strong>苹方</strong>
-                    <small>PingFang SC</small>
-                  </div>
-                  <div className="system-sample system-sample-color">
-                    <span>COLOR</span>
-                    <div><i></i><i></i><i></i><i></i><i></i></div>
-                  </div>
-                  <div className="system-sample system-sample-component">
-                    <span>COMPONENT</span>
-                    <img src={withBasePath("/system-component-card.png")} alt="" />
-                  </div>
-                </div>
-              )}
-              <div className="capability-copy">
-                <h3>{item.title}</h3>
-                <ul className="capability-tags" aria-label={`${item.title}的具体能力`}>
-                  {item.skills.map((skill) => <li key={skill}>{skill}</li>)}
-                </ul>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <footer className="contact" id="contact">
-        <div className="section-label"><span>05</span> CONTACT / 联系</div>
+        <div className="section-label"><span>04</span> CONTACT / 联系</div>
         <div className="contact-main">
           <FallingText
             className="contact-falling"
@@ -814,7 +710,7 @@ export default function Home() {
             <span className="email-copy"><small>EMAIL / 写邮件</small><strong>3619554001@qq.com</strong></span>
             <span className="email-arrow" aria-hidden="true">↗</span>
           </a>
-          <a className="contact-resume" href={withBasePath("/resume.pdf?v=20260831")} target="_blank" rel="noreferrer">
+          <a className="contact-resume" href={withBasePath("/resume.pdf?v=20261111")} target="_blank" rel="noreferrer">
             <span>查看简历</span><i aria-hidden="true">↗</i>
           </a>
         </div>

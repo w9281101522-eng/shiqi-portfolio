@@ -8,7 +8,6 @@ const items = [
   { label: "关于我", href: "#about" },
   { label: "精选项目", href: "#projects" },
   { label: "实习经历", href: "#experience" },
-  { label: "专业能力", href: "#capabilities" },
   { label: "联系", href: "#contact" },
 ];
 

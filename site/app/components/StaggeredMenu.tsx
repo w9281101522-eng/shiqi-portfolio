@@ -7,7 +7,6 @@ const menuItems = [
   { label: "关于我", english: "About", href: "#about" },
   { label: "精选项目", english: "Selected Work", href: "#projects" },
   { label: "实习经历", english: "Experience", href: "#experience" },
-  { label: "专业能力", english: "Capabilities", href: "#capabilities" },
   { label: "联系我", english: "Contact", href: "#contact" },
 ];
 
